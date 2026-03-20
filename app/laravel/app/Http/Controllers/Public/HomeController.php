@@ -103,7 +103,7 @@ class HomeController extends Controller
             );
             $plain = trim(strip_tags($normalizedHtml));
             $plain = preg_replace('/[ \t]+/u', ' ', $plain) ?? '';
-            $plain = preg_replace('/\n{3,}/u', "\n\n", $plain) ?? '';
+            $plain = preg_replace('/\n{2,}/u', "\n", $plain) ?? '';
             $post->feedCaption = trim($plain);
         });
 

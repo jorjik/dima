@@ -25,7 +25,7 @@
                 <article class="rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-4 bg-white/40 dark:bg-[#161615]/40 backdrop-blur">
                     <div class="text-sm opacity-80 mb-2">{{ $post->created_at?->format('d.m.Y') }}</div>
 
-                    <div class="text-lg font-semibold mb-3">{{ $post->title }}</div>
+                    <div class="text-lg font-semibold mb-1">{{ $post->title }}</div>
 
                     @if ($post->isGalleryPost && $post->hasGallery)
                         @include('public.partials.feed-gallery-card', [
@@ -34,7 +34,12 @@
                     @else
                         <div class="relative" data-feed-item>
                             <div
-                                class="overflow-hidden transition-all duration-300"
+                                class="overflow-hidden transition-all duration-300
+                                    [&_article_p]:my-1
+                                    [&_article_h1]:mt-0 [&_article_h1]:mb-1
+                                    [&_article_h2]:mt-0 [&_article_h2]:mb-1
+                                    [&_article_h3]:mt-0 [&_article_h3]:mb-1
+                                    [&_article_h4]:mt-0 [&_article_h4]:mb-1"
                                 style="max-height: 18rem;"
                                 data-feed-preview
                                 data-collapsed-height="18rem"
@@ -63,7 +68,7 @@
                     @if ($post->isGalleryPost && filled($post->feedCaption))
                         <div class="relative" data-caption-item>
                             <div
-                                class="overflow-hidden transition-all duration-300 text-sm leading-6 opacity-90 whitespace-pre-line break-words"
+                                class="overflow-hidden transition-all duration-300 text-sm leading-5 opacity-90 whitespace-pre-line break-words"
                                 style="max-height: 8.5rem;"
                                 data-caption-preview
                                 data-collapsed-height="8.5rem"
