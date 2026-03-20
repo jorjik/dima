@@ -85,6 +85,16 @@ class SiteSettingResource extends Resource
                 ->rows(3)
                 ->placeholder('Посты внутри папок. Обложки и фон берутся только из фото.'),
 
+            TextInput::make('home_meta_title')
+                ->label('SEO title главной')
+                ->maxLength(200)
+                ->placeholder('Альбом жизни'),
+
+            Textarea::make('home_meta_description')
+                ->label('SEO description главной')
+                ->rows(3)
+                ->placeholder('Фото и видео из семейного архива.'),
+
             FileUpload::make('home_hero_background_path')
                 ->label('Фон блока на главной (картинка)')
                 ->image()

@@ -14,6 +14,8 @@ class SiteSetting extends Model
         'home_hero_title',
         'home_hero_text',
         'home_hero_background_path',
+        'home_meta_title',
+        'home_meta_description',
     ];
 }
 

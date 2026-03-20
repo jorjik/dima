@@ -1,19 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{{ config('app.name', 'Альбом жизни') }}</title>
-
-        @vite(['resources/css/app.css'])
-        @stack('styles')
-        <script>
-            // If Tailwind is loading, keep the page typography consistent.
-            window.__APP_LOCALE__ = 'ru';
-        </script>
-    </head>
-
     @php
         /** @var \App\Models\SiteSetting|null $setting */
         $setting = \App\Models\SiteSetting::query()->first();
@@ -25,7 +11,64 @@
         $siteBgUrl = $setting?->site_background_path
             ? \Illuminate\Support\Facades\Storage::disk('public')->url($setting->site_background_path)
             : null;
+
+        $siteName = $headerTitle;
+        $routeName = request()->route()?->getName();
+
+        $homeMetaTitle = trim((string) ($setting?->home_meta_title ?: $siteName));
+        $homeMetaDescription = trim((string) ($setting?->home_meta_description ?: ($setting?->home_hero_text ?: 'Фото и видео из семейного архива.')));
+
+        $generatedTitle = $siteName;
+        $generatedDescription = $homeMetaDescription;
+
+        if (request()->routeIs('home')) {
+            $generatedTitle = $homeMetaTitle;
+            $generatedDescription = $homeMetaDescription;
+        } elseif (request()->routeIs('folder.show') && isset($folder)) {
+            $postsCount = isset($posts) ? $posts->count() : $folder->posts()->count();
+            $generatedTitle = trim($folder->title . ' - ' . $siteName);
+            $generatedDescription = trim("Папка {$folder->title}. Постов: {$postsCount}.");
+        } elseif (request()->routeIs('post.show') && isset($post)) {
+            $generatedTitle = trim($post->title . ' - ' . $siteName);
+
+            $plainText = trim(strip_tags(\Illuminate\Support\Str::markdown((string) ($post->body_markdown ?? ''))));
+            $plainText = preg_replace('/\s+/u', ' ', $plainText) ?? '';
+            $folderName = $folder->title ?? $post->folder?->title ?? null;
+            $generatedDescription = $plainText !== ''
+                ? \Illuminate\Support\Str::limit($plainText, 160)
+                : trim('Пост' . ($folderName ? " из папки {$folderName}" : '') . '.');
+        } elseif (filled($routeName)) {
+            $generatedTitle = trim(\Illuminate\Support\Str::headline(str_replace('.', ' ', $routeName)) . ' - ' . $siteName);
+            $generatedDescription = trim("Страница сайта {$siteName}.");
+        }
+
+        $pageTitle = trim((string) $__env->yieldContent('title'));
+        if ($pageTitle === '') {
+            $pageTitle = $generatedTitle;
+        } elseif (! \Illuminate\Support\Str::contains($pageTitle, $siteName)) {
+            $pageTitle = trim($pageTitle . ' - ' . $siteName);
+        }
+
+        $metaDescription = trim((string) $__env->yieldContent('meta_description'));
+        if ($metaDescription === '') {
+            $metaDescription = $generatedDescription;
+        }
+        $metaDescription = trim(strip_tags($metaDescription));
+        $metaDescription = preg_replace('/\s+/u', ' ', $metaDescription) ?? '';
+        $metaDescription = \Illuminate\Support\Str::limit($metaDescription, 160);
     @endphp
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ $pageTitle }}</title>
+        <meta name="description" content="{{ $metaDescription }}">
+        @vite(['resources/css/app.css'])
+        @stack('styles')
+        <script>
+            // If Tailwind is loading, keep the page typography consistent.
+            window.__APP_LOCALE__ = 'ru';
+        </script>
+    </head>
 
     <body
         class="bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] min-h-screen"

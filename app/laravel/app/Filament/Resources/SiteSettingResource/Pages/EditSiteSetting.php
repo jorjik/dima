@@ -19,6 +19,8 @@ class EditSiteSetting extends EditRecord
             $record = SiteSetting::query()->create([
                 'id' => (int) $key,
                 'header_title' => 'Альбом жизни',
+                'home_meta_title' => 'Альбом жизни',
+                'home_meta_description' => 'Фото и видео из семейного архива.',
             ]);
         }
 
