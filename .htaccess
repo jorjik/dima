@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# 1) Служебные файлы (css/js/images/storage и т.д.) должны браться из app/laravel/public,
+#    даже если Document Root указывает на корень проекта.
+RewriteCond %{DOCUMENT_ROOT}/app/laravel/public%{REQUEST_URI} -f
+RewriteRule ^(.*)$ /app/laravel/public/$1 [L]
+
+# 2) Остальное отдаём через прокси index.php в корне,
+#    который подключает app/laravel/public/index.php (Laravel).
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
