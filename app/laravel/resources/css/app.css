@@ -9,3 +9,21 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .feed-card {
+        @apply rounded-2xl border border-white/25 bg-black/45 p-4 md:p-5 shadow-xl backdrop-blur-md;
+    }
+
+    .feed-date {
+        @apply mb-2 text-xs font-medium uppercase tracking-wide text-white/80;
+    }
+
+    .feed-title {
+        @apply mb-2 text-2xl font-bold leading-tight text-white;
+    }
+
+    .feed-toggle-btn {
+        @apply mt-3 mx-auto flex w-fit min-h-12 items-center justify-center rounded-2xl border border-white/45 bg-black/70 px-5 text-sm font-semibold tracking-wide text-white shadow-md backdrop-blur transition-colors hover:bg-black/80;
+    }
+}

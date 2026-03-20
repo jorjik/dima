@@ -6,26 +6,26 @@
 
 @section('content')
     <section class="mb-10">
-        <div class="rounded-xl overflow-hidden border border-[#e3e3e0] dark:border-[#3E3E3A] relative"
+        <div class="relative overflow-hidden rounded-2xl border border-white/30 shadow-xl"
              style="background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center;">
-            <div class="absolute inset-0 bg-black/40"></div>
-            <div class="relative p-8">
-                <h1 class="text-3xl font-bold tracking-tight mb-2">{{ $heroTitle }}</h1>
+            <div class="absolute inset-0 bg-black/55"></div>
+            <div class="relative p-6 md:p-8">
+                <h1 class="mb-2 text-3xl md:text-4xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
-                    <p class="text-sm opacity-90">{{ $heroText }}</p>
+                    <p class="max-w-2xl text-sm md:text-base text-white/90">{{ $heroText }}</p>
                 @endif
             </div>
         </div>
     </section>
 
     <section>
-        <h2 class="text-xl font-semibold mb-4">Лента</h2>
+        <h2 class="mb-4 text-xl md:text-2xl font-semibold text-white">Лента</h2>
         <div class="flex flex-col gap-4">
             @foreach ($recentPosts as $post)
-                <article class="rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-4 bg-white/40 dark:bg-[#161615]/40 backdrop-blur">
-                    <div class="text-sm opacity-80 mb-2">{{ $post->created_at?->format('d.m.Y') }}</div>
+                <article class="feed-card">
+                    <div class="feed-date">{{ $post->created_at?->format('d.m.Y') }}</div>
 
-                    <div class="text-lg font-semibold mb-1">{{ $post->title }}</div>
+                    <div class="feed-title">{{ $post->title }}</div>
 
                     @if ($post->isGalleryPost && $post->hasGallery)
                         @include('public.partials.feed-gallery-card', [
@@ -35,6 +35,9 @@
                         <div class="relative" data-feed-item>
                             <div
                                 class="overflow-hidden transition-all duration-300
+                                    text-white/95
+                                    [&_article]:max-w-prose [&_article]:!text-white/95
+                                    [&_article_h1]:!text-white [&_article_h2]:!text-white [&_article_h3]:!text-white [&_article_h4]:!text-white
                                     [&_article_p]:my-1
                                     [&_article_h1]:mt-0 [&_article_h1]:mb-1
                                     [&_article_h2]:mt-0 [&_article_h2]:mb-1
@@ -54,33 +57,33 @@
                             </div>
 
                             <div
-                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"
+                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/70 to-transparent"
                                 data-feed-gradient
                             ></div>
                             <button
                                 type="button"
-                                class="hidden mt-3 w-fit mx-auto flex items-center justify-center rounded-full border border-white/35 bg-black/60 px-4 py-1.5 text-xs font-medium tracking-wide text-white shadow-md backdrop-blur transition-colors hover:bg-black/75"
+                                class="feed-toggle-btn"
                                 data-feed-toggle
                             >Раскрыть</button>
                         </div>
                     @endif
 
                     @if ($post->isGalleryPost && filled($post->feedCaption))
-                        <div class="relative" data-caption-item>
+                        <div class="relative mt-2" data-caption-item>
                             <div
-                                class="overflow-hidden transition-all duration-300 text-sm leading-5 opacity-90 whitespace-pre-line break-words"
+                                class="overflow-hidden transition-all duration-300 text-sm leading-6 text-white/90 whitespace-pre-line break-words"
                                 style="max-height: 8.5rem;"
                                 data-caption-preview
                                 data-collapsed-height="8.5rem"
                             >{{ $post->feedCaption }}</div>
 
                             <div
-                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"
+                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent"
                                 data-caption-gradient
                             ></div>
                             <button
                                 type="button"
-                                class="hidden mt-3 w-fit mx-auto flex items-center justify-center rounded-full border border-white/35 bg-black/60 px-4 py-1.5 text-xs font-medium tracking-wide text-white shadow-md backdrop-blur transition-colors hover:bg-black/75"
+                                class="feed-toggle-btn"
                                 data-caption-toggle
                             >Раскрыть</button>
                         </div>

@@ -50,7 +50,7 @@
                     data-fancybox="{{ $lightboxGroup }}"
                     data-caption="{{ $media->original_name }}"
                     @if ($isVideo) data-width="1280" data-height="720" @endif
-                    class="relative block h-44 md:h-48 overflow-hidden rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
+                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
                 >
                     @if ($isVideo)
                         <video muted playsinline preload="metadata" class="h-full w-full object-cover">
@@ -67,7 +67,7 @@
                 <a
                     href="{{ $targetUrl }}"
                     @if (!$galleryLinkUrl) target="_blank" rel="noopener" @endif
-                    class="relative block h-44 md:h-48 overflow-hidden rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
+                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
                 >
                     @if ($isVideo)
                         <video muted playsinline preload="metadata" class="h-full w-full object-cover">
@@ -88,7 +88,7 @@
 @if ($contentAudios->count())
     <div class="grid grid-cols-1 gap-3">
         @foreach ($contentAudios as $audio)
-            <div class="rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-4 bg-white/60 dark:bg-[#161615]/40">
+            <div class="rounded-2xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-4 bg-white/60 dark:bg-[#161615]/40">
                 <div class="text-sm opacity-80 mb-2">{{ $audio->original_name }}</div>
                 <audio controls class="w-full">
                     <source src="{{ $audio->url }}" type="{{ $audio->mime ?: 'audio/mpeg' }}">

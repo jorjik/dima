@@ -87,7 +87,7 @@
                 <div class="absolute inset-0 bg-black/40"></div>
             @endif
 
-            <div class="relative max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="relative max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
                 <div class="flex flex-col">
                     <a href="{{ route('home') }}" class="font-medium text-lg">
                         {{ $headerTitle }}
@@ -105,7 +105,7 @@
             </div>
         </header>
 
-        <main class="max-w-5xl mx-auto px-4 py-8">
+        <main class="max-w-4xl mx-auto px-4 py-8">
             @yield('content')
         </main>
         @stack('scripts')
