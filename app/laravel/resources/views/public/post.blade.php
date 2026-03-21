@@ -26,6 +26,8 @@
                 'videos' => $videos,
                 'audios' => $audios,
                 'enableLightbox' => true,
+                'lazyImages' => true,
+                'eagerFirstImage' => true,
             ])
         </div>
     </section>

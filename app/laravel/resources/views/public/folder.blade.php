@@ -1,36 +1,59 @@
 @extends('public.layouts.app')
 
-@section('content')
-    <section class="mb-8">
-        <div class="rounded-xl overflow-hidden border border-[#e3e3e0] dark:border-[#3E3E3A] relative"
-             style="background-color:#111; background-image: url('{{ $folder->background_url ?: 'https://picsum.photos/seed/' . $folder->slug . '-bg/1200/600' }}'); background-size: cover; background-position: center;">
-            <div class="absolute inset-0 bg-black/45"></div>
-            <div class="relative p-8">
-                <div class="text-sm opacity-90">Папка</div>
-                <h1 class="text-3xl font-bold tracking-tight">{{ $folder->title }}</h1>
-                <div class="text-sm opacity-90 mt-2">{{ $posts->count() }} постов</div>
-            </div>
-        </div>
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+@endpush
 
-        <div class="mt-4">
-            <a href="{{ route('home') }}" class="text-sm underline underline-offset-4">
-                Назад на главную
-            </a>
+@section('content')
+    <section class="mb-10">
+        <div
+            class="relative overflow-hidden rounded-2xl border border-white/30 shadow-xl bg-[#111]"
+            @if ($folder->background_url)
+                style="background-image: url('{{ $folder->background_url }}'); background-size: cover; background-position: center;"
+            @endif
+        >
+            <div class="absolute inset-0 bg-black/55"></div>
+            <div class="relative p-6 md:p-8 text-white">
+                @php
+                    $pc = $posts->count();
+                    $postsLabel = 'постов';
+                    if ($pc % 10 === 1 && $pc % 100 !== 11) {
+                        $postsLabel = 'пост';
+                    } elseif (in_array($pc % 10, [2, 3, 4], true) && ! in_array($pc % 100, [12, 13, 14], true)) {
+                        $postsLabel = 'поста';
+                    }
+                @endphp
+                <div class="mb-2 text-xs font-medium uppercase tracking-wide text-white/80">
+                    {{ $pc }} {{ $postsLabel }}
+                </div>
+                <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-4xl">{{ $folder->title }}</h1>
+                <a href="{{ route('home') }}" class="text-sm text-white/90 underline underline-offset-4 hover:text-white">
+                    Назад на главную
+                </a>
+            </div>
         </div>
     </section>
 
     <section>
-        <h2 class="text-xl font-semibold mb-4">Посты</h2>
+        <h2 class="mb-4 text-xl font-semibold text-white md:text-2xl">Посты</h2>
         <div class="flex flex-col gap-4">
             @foreach ($posts as $post)
-                <article class="rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-4 bg-white/40 dark:bg-[#161615]/40 backdrop-blur">
-                    <div class="text-sm opacity-80 mb-2">{{ $post->created_at?->format('d.m.Y') }}</div>
+                <article class="feed-card">
+                    <div class="feed-date">{{ $post->created_at?->format('d.m.Y') }}</div>
 
-                    <div class="text-lg font-semibold mb-3">{{ $post->title }}</div>
+                    <div class="feed-title">{{ $post->title }}</div>
 
                     <div class="relative" data-feed-item>
                         <div
-                            class="overflow-hidden transition-all duration-300"
+                            class="overflow-hidden transition-all duration-300
+                                text-white/95
+                                [&_article]:max-w-prose [&_article]:!text-white/95
+                                [&_article_h1]:!text-white [&_article_h2]:!text-white [&_article_h3]:!text-white [&_article_h4]:!text-white
+                                [&_article_p]:my-1
+                                [&_article_h1]:mt-0 [&_article_h1]:mb-1
+                                [&_article_h2]:mt-0 [&_article_h2]:mb-1
+                                [&_article_h3]:mt-0 [&_article_h3]:mb-1
+                                [&_article_h4]:mt-0 [&_article_h4]:mb-1"
                             style="max-height: 18rem;"
                             data-feed-preview
                             data-collapsed-height="18rem"
@@ -40,17 +63,18 @@
                                 'images' => $post->images,
                                 'videos' => $post->videos,
                                 'audios' => $post->audios,
-                                'galleryLinkUrl' => route('post.show', ['slug' => $post->slug]),
+                                'enableLightbox' => true,
+                                'lazyImages' => true,
                             ])
                         </div>
 
                         <div
-                            class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"
+                            class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/70 to-transparent"
                             data-feed-gradient
                         ></div>
                         <button
                             type="button"
-                            class="hidden mt-3 w-fit mx-auto flex items-center justify-center rounded-full border border-white/35 bg-black/60 px-4 py-1.5 text-xs font-medium tracking-wide text-white shadow-md backdrop-blur transition-colors hover:bg-black/75"
+                            class="feed-toggle-btn"
                             data-feed-toggle
                         >Раскрыть</button>
                     </div>
@@ -61,14 +85,14 @@
 
     <script>
         (function () {
-            const items = document.querySelectorAll('[data-feed-item]');
-            const evaluateItem = (item) => {
+            const feedItems = document.querySelectorAll('[data-feed-item]');
+            const evaluateFeedItem = (item) => {
                 const preview = item.querySelector('[data-feed-preview]');
                 const gradient = item.querySelector('[data-feed-gradient]');
                 const toggle = item.querySelector('[data-feed-toggle]');
                 if (!preview || !gradient || !toggle) return;
 
-                const collapsedHeight = preview.dataset.collapsedHeight || '8.5rem';
+                const collapsedHeight = preview.dataset.collapsedHeight || '18rem';
                 const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize || '16');
                 const collapsedPx = parseFloat(collapsedHeight) * rootFontSize;
                 const expanded = item.dataset.expanded === '1';
@@ -76,6 +100,7 @@
                 preview.style.maxHeight = 'none';
                 const fullHeight = preview.scrollHeight;
                 const isLong = fullHeight > (collapsedPx + 2);
+
                 if (!isLong) {
                     item.dataset.expanded = '0';
                     preview.style.maxHeight = '';
@@ -101,39 +126,57 @@
                 }
             };
 
-            items.forEach((item) => {
+            feedItems.forEach((item) => {
                 const preview = item.querySelector('[data-feed-preview]');
                 const toggle = item.querySelector('[data-feed-toggle]');
                 if (!preview || !toggle) return;
 
                 item.dataset.expanded = '0';
-                evaluateItem(item);
+                evaluateFeedItem(item);
 
                 toggle.addEventListener('click', function () {
                     item.dataset.expanded = item.dataset.expanded === '1' ? '0' : '1';
-                    evaluateItem(item);
+                    evaluateFeedItem(item);
                 });
 
                 preview.querySelectorAll('img').forEach((img) => {
                     if (!img.complete) {
-                        img.addEventListener('load', () => evaluateItem(item), { once: true });
-                        img.addEventListener('error', () => evaluateItem(item), { once: true });
+                        img.addEventListener('load', () => evaluateFeedItem(item), { once: true });
+                        img.addEventListener('error', () => evaluateFeedItem(item), { once: true });
                     }
                 });
 
                 preview.querySelectorAll('video').forEach((video) => {
-                    video.addEventListener('loadedmetadata', () => evaluateItem(item), { once: true });
+                    video.addEventListener('loadedmetadata', () => evaluateFeedItem(item), { once: true });
                 });
             });
 
             window.addEventListener('load', () => {
-                items.forEach((item) => evaluateItem(item));
+                feedItems.forEach((item) => evaluateFeedItem(item));
             });
 
             window.addEventListener('resize', () => {
-                items.forEach((item) => evaluateItem(item));
+                feedItems.forEach((item) => evaluateFeedItem(item));
             });
         })();
     </script>
 @endsection
 
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        if (window.Fancybox) {
+            window.Fancybox.bind('[data-fancybox^="post-gallery-"]', {
+                Thumbs: {
+                    autoStart: true,
+                },
+                Carousel: {
+                    Video: {
+                        autoplay: true,
+                        muted: true,
+                    },
+                },
+            });
+        }
+    </script>
+@endpush

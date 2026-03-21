@@ -8,13 +8,19 @@
     <div class="mb-3">
         <a
             href="{{ $postUrl }}"
-            class="group relative block h-56 md:h-64 overflow-hidden rounded-2xl border border-white/30 shadow-xl"
-            @if ($bgUrl)
-                style="background-image:url('{{ $bgUrl }}'); background-size:cover; background-position:center;"
-            @else
-                style="background-color:#111;"
-            @endif
+            class="group relative block h-56 md:h-64 overflow-hidden rounded-2xl border border-white/30 shadow-xl bg-[#111]"
         >
+            @if ($bgUrl)
+                <img
+                    src="{{ $bgUrl }}"
+                    alt="{{ $post->title }}"
+                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 768px) 100vw, 896px"
+                    fetchpriority="low"
+                >
+            @endif
             <div class="absolute inset-0 transition-colors group-hover:opacity-95" style="background: rgba(0, 0, 0, 0.11);"></div>
 
             <div class="absolute inset-0 z-10 flex items-center justify-center">

@@ -10,6 +10,17 @@
     $galleryLinkUrl = $galleryLinkUrl ?? null;
     $enableLightbox = $enableLightbox ?? blank($galleryLinkUrl);
     $lightboxGroup = 'post-gallery-' . ($contentPost->id ?? 'x');
+    /** @var bool Загружать картинки лениво (лента, блоки ниже первого экрана). */
+    $lazyImages = $lazyImages ?? true;
+    /** @var bool Первая картинка в сетке — eager (страница поста, LCP). */
+    $eagerFirstImage = $eagerFirstImage ?? false;
+    $imageSizesGrid = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+    $firstRasterMedia = $contentVisualMedia->first(function ($m) {
+        $isVid = ($m->media_type ?? null) === 'video' || str_starts_with((string) ($m->mime ?? ''), 'video/');
+
+        return ! $isVid;
+    });
+    $firstRasterMediaId = $firstRasterMedia?->id;
 @endphp
 
 @if (filled(trim((string) ($contentPost->body_markdown ?? ''))))
@@ -43,6 +54,16 @@
             @php
                 $isVideo = ($media->media_type ?? null) === 'video' || str_starts_with((string) ($media->mime ?? ''), 'video/');
                 $targetUrl = $galleryLinkUrl ?: $media->url;
+                $imgLoading = 'lazy';
+                if (! $lazyImages) {
+                    $imgLoading = 'eager';
+                } elseif ($eagerFirstImage && $loop->first && ! $isVideo) {
+                    $imgLoading = 'eager';
+                }
+                $imgClass = 'h-full w-full max-w-full object-cover';
+                $fetchHigh = ! $isVideo && $imgLoading === 'eager' && $firstRasterMediaId !== null
+                    && (int) $media->id === (int) $firstRasterMediaId;
+                $fetchLow = ! $isVideo && $imgLoading === 'lazy';
             @endphp
             @if ($enableLightbox)
                 <a
@@ -60,7 +81,20 @@
                             <span class="rounded-full bg-black/60 px-3 py-1 text-xs">Видео</span>
                         </span>
                     @else
-                        <img src="{{ $media->url }}" alt="{{ $media->original_name }}" class="h-full w-full object-cover">
+                        <img
+                            src="{{ $media->url }}"
+                            alt="{{ $media->original_name }}"
+                            class="{{ $imgClass }}"
+                            loading="{{ $imgLoading }}"
+                            decoding="async"
+                            sizes="{{ $imageSizesGrid }}"
+                            @if ($lazyImages && $imgLoading === 'lazy') fetchpriority="low" @endif
+                            @if ($imgLoading === 'eager') fetchpriority="high" @endif
+                            @if (filled($media->width) && filled($media->height))
+                                width="{{ (int) $media->width }}"
+                                height="{{ (int) $media->height }}"
+                            @endif
+                        >
                     @endif
                 </a>
             @else
@@ -77,7 +111,20 @@
                             <span class="rounded-full bg-black/60 px-3 py-1 text-xs">Видео</span>
                         </span>
                     @else
-                        <img src="{{ $media->url }}" alt="{{ $media->original_name }}" class="h-full w-full object-cover">
+                        <img
+                            src="{{ $media->url }}"
+                            alt="{{ $media->original_name }}"
+                            class="{{ $imgClass }}"
+                            loading="{{ $imgLoading }}"
+                            decoding="async"
+                            sizes="{{ $imageSizesGrid }}"
+                            @if ($fetchHigh) fetchpriority="high" @endif
+                            @if ($fetchLow) fetchpriority="low" @endif
+                            @if (filled($media->width) && filled($media->height))
+                                width="{{ (int) $media->width }}"
+                                height="{{ (int) $media->height }}"
+                            @endif
+                        >
                     @endif
                 </a>
             @endif

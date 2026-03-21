@@ -47,7 +47,7 @@ class FolderController extends Controller
         $folder->background_url = $bg ? Storage::disk('public')->url($bg->path) : null;
 
         $posts = $folder->posts()
-            ->with(['cover', 'images'])
+            ->with(['cover', 'images', 'videos', 'audios', 'media'])
             ->orderByDesc('created_at')
             ->get()
             ->map(function (Post $post): Post {
@@ -65,7 +65,16 @@ class FolderController extends Controller
 
                 $post->cover_url = $cover ? Storage::disk('public')->url($cover->path) : null;
 
+                $post->media->each(function (MediaFile $m): void {
+                    $m->url = Storage::disk('public')->url($m->path);
+                });
                 $post->images->each(function (MediaFile $m): void {
+                    $m->url = Storage::disk('public')->url($m->path);
+                });
+                $post->videos->each(function (MediaFile $m): void {
+                    $m->url = Storage::disk('public')->url($m->path);
+                });
+                $post->audios->each(function (MediaFile $m): void {
                     $m->url = Storage::disk('public')->url($m->path);
                 });
 
