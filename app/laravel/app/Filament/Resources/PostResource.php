@@ -13,8 +13,8 @@ use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -57,9 +57,27 @@ class PostResource extends Resource
                                 ->required()
                                 ->maxLength(255),
 
-                            Textarea::make('body_markdown')
+                            MarkdownEditor::make('body_markdown')
                                 ->label('Текст (Markdown)')
-                                ->rows(10)
+                                ->placeholder('Списки, **жирный**, ссылки…')
+                                ->toolbarButtons([
+                                    'attachFiles',
+                                    'bold',
+                                    'italic',
+                                    'strike',
+                                    'link',
+                                    'blockquote',
+                                    'bulletList',
+                                    'orderedList',
+                                    'codeBlock',
+                                    'table',
+                                    'undo',
+                                    'redo',
+                                ])
+                                ->fileAttachmentsDisk('public')
+                                ->fileAttachmentsDirectory('posts/markdown-attachments')
+                                ->fileAttachmentsVisibility('public')
+                                ->minHeight('16rem')
                                 ->nullable(),
 
                             Select::make('folder_id')
