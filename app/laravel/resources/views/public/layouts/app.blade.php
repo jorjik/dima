@@ -12,6 +12,8 @@
             ? \Illuminate\Support\Facades\Storage::disk('public')->url($setting->site_background_path)
             : null;
 
+        $siteBgOverlayPercent = max(0, min(100, (int) ($setting?->site_background_overlay_percent ?? 20)));
+
         $siteName = $headerTitle;
         $routeName = request()->route()?->getName();
 
@@ -62,6 +64,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ $pageTitle }}</title>
         <meta name="description" content="{{ $metaDescription }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet"
+        >
         @vite(['resources/css/app.css'])
         @stack('styles')
         <script>
@@ -71,14 +79,20 @@
     </head>
 
     <body
-        class="bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] min-h-screen"
+        class="font-sans antialiased bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] min-h-screen"
         @if(!empty($siteBgUrl))
             style="background-image: url('{{ $siteBgUrl }}'); background-size: cover; background-position: center; background-attachment: fixed;"
         @endif
     >
+        @if(!empty($siteBgUrl) && $siteBgOverlayPercent > 0)
+            <div
+                class="pointer-events-none fixed inset-0 z-0"
+                style="background-color: rgba(0, 0, 0, {{ $siteBgOverlayPercent / 100 }});"
+            ></div>
+        @endif
 
         <header
-            class="w-full border-b border-[#e3e3e0] dark:border-[#3E3E3A] relative overflow-hidden"
+            class="w-full border-b border-[#e3e3e0] dark:border-[#3E3E3A] relative z-10 overflow-hidden"
             @if(!empty($headerBgUrl))
                 style="background-image: url('{{ $headerBgUrl }}'); background-size: cover; background-position: center;"
             @endif
@@ -105,7 +119,7 @@
             </div>
         </header>
 
-        <main class="max-w-4xl mx-auto px-4 py-8">
+        <main class="relative z-10 max-w-4xl mx-auto px-4 py-8">
             @yield('content')
         </main>
         @stack('scripts')

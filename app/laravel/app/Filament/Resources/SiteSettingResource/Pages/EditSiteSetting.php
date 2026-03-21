@@ -21,6 +21,7 @@ class EditSiteSetting extends EditRecord
                 'header_title' => 'Альбом жизни',
                 'home_meta_title' => 'Альбом жизни',
                 'home_meta_description' => 'Фото и видео из семейного архива.',
+                'site_background_overlay_percent' => 20,
             ]);
         }
 

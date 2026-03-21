@@ -75,6 +75,15 @@ class SiteSettingResource extends Resource
                     'image/svg+xml',
                 ]),
 
+            TextInput::make('site_background_overlay_percent')
+                ->label('Затемнение фона сайта')
+                ->helperText('Процент чёрной «вуали» поверх фоновой картинки. 0 — без затемнения, 20 — как раньше по умолчанию.')
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(100)
+                ->default(20)
+                ->suffix('%'),
+
             TextInput::make('home_hero_title')
                 ->label('Заголовок блока на главной')
                 ->maxLength(200)

@@ -15,7 +15,7 @@
                 style="background-color:#111;"
             @endif
         >
-            <div class="absolute inset-0 transition-colors group-hover:opacity-95" style="background: rgba(0, 0, 0, 0.62);"></div>
+            <div class="absolute inset-0 transition-colors group-hover:opacity-95" style="background: rgba(0, 0, 0, 0.11);"></div>
 
             <div class="absolute inset-0 z-10 flex items-center justify-center">
                 <span class="inline-flex min-h-12 items-center rounded-2xl px-5 text-sm font-semibold text-white tracking-wide shadow-md" style="border:1px solid rgba(255,255,255,.55); background: rgba(0,0,0,.75);">
