@@ -1,0 +1,23 @@
+.git
+.gitignore
+app/laravel/.env
+app/laravel/.env.*
+!app/laravel/.env.example
+**/.DS_Store
+**/Thumbs.db
+
+# Не копировать тяжёлые/пересобираемые каталоги Laravel
+app/laravel/vendor
+app/laravel/node_modules
+app/laravel/public/build
+app/laravel/public/hot
+app/laravel/storage/logs/*
+app/laravel/storage/framework/cache/data/*
+app/laravel/storage/framework/sessions/*
+app/laravel/storage/framework/views/*
+app/laravel/bootstrap/cache/*.php
+
+# Тесты и мусор
+**/tests
+**/.phpunit.result.cache
+**/*.md
