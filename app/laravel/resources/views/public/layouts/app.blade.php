@@ -79,7 +79,7 @@
     </head>
 
     <body
-        class="font-sans antialiased bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] min-h-screen"
+        class="font-sans antialiased bg-[#020617] text-[#E2E8F0] min-h-screen"
         @if(!empty($siteBgUrl))
             style="background-image: url('{{ $siteBgUrl }}'); background-size: cover; background-position: center; background-attachment: fixed;"
         @endif
@@ -92,7 +92,7 @@
         @endif
 
         <header
-            class="w-full border-b border-[#e3e3e0] dark:border-[#3E3E3A] relative z-10 overflow-hidden"
+            class="w-full border-b border-white/15 bg-black/25 relative z-10 overflow-hidden backdrop-blur"
             @if(!empty($headerBgUrl))
                 style="background-image: url('{{ $headerBgUrl }}'); background-size: cover; background-position: center;"
             @endif
@@ -103,16 +103,16 @@
 
             <div class="relative max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
                 <div class="flex flex-col">
-                    <a href="{{ route('home') }}" class="font-medium text-lg">
+                    <a href="{{ route('home') }}" class="font-semibold text-lg text-white">
                         {{ $headerTitle }}
                     </a>
                     @if(!empty($headerTagline))
-                        <div class="text-sm opacity-80">{{ $headerTagline }}</div>
+                        <div class="text-sm text-white/80">{{ $headerTagline }}</div>
                     @endif
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('home') }}" class="text-sm underline underline-offset-4">
+                    <a href="{{ route('home') }}" class="text-sm text-white/90 underline underline-offset-4 transition-colors duration-200 hover:text-white">
                         Главная
                     </a>
                 </div>

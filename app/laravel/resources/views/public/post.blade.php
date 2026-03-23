@@ -6,20 +6,20 @@
 
 @section('content')
     <section class="mb-8">
-        <div class="text-sm opacity-80 mb-2">
-            <a href="{{ route('home') }}" class="underline underline-offset-4">Главная</a>
+        <div class="text-sm text-white/80 mb-2">
+            <a href="{{ route('home') }}" class="glass-link">Главная</a>
             @if ($folder)
-                <span class="opacity-60"> / </span>
-                <a href="{{ route('folder.show', ['slug' => $folder->slug]) }}" class="underline underline-offset-4">{{ $folder->title }}</a>
+                <span class="text-white/55"> / </span>
+                <a href="{{ route('folder.show', ['slug' => $folder->slug]) }}" class="glass-link">{{ $folder->title }}</a>
             @endif
         </div>
 
-        <h1 class="text-3xl font-bold tracking-tight mb-2">{{ $post->title }}</h1>
-        <div class="text-xs opacity-70 mb-4">{{ $post->created_at?->format('d.m.Y') }}</div>
+        <h1 class="text-3xl font-bold tracking-tight text-white mb-2">{{ $post->title }}</h1>
+        <div class="text-xs text-white/70 mb-4">{{ $post->created_at?->format('d.m.Y') }}</div>
     </section>
 
     <section class="mb-10">
-        <div class="rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-5 bg-white/60 dark:bg-[#161615]/40 backdrop-blur">
+        <div class="content-panel">
             @include('public.partials.post-content', [
                 'post' => $post,
                 'images' => $images,

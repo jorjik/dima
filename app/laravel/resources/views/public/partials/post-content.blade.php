@@ -71,7 +71,7 @@
                     data-fancybox="{{ $lightboxGroup }}"
                     data-caption="{{ $media->original_name }}"
                     @if ($isVideo) data-width="1280" data-height="720" @endif
-                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
+                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl bg-[#111]"
                 >
                     @if ($isVideo)
                         <video muted playsinline preload="metadata" class="h-full w-full object-cover">
@@ -96,12 +96,13 @@
                             @endif
                         >
                     @endif
+                    <span class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]"></span>
                 </a>
             @else
                 <a
                     href="{{ $targetUrl }}"
                     @if (!$galleryLinkUrl) target="_blank" rel="noopener" @endif
-                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl border border-[#e3e3e0] dark:border-[#3E3E3A] bg-[#111]"
+                    class="relative block h-44 md:h-48 overflow-hidden rounded-2xl bg-[#111]"
                 >
                     @if ($isVideo)
                         <video muted playsinline preload="metadata" class="h-full w-full object-cover">
@@ -126,6 +127,7 @@
                             @endif
                         >
                     @endif
+                    <span class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.22)]"></span>
                 </a>
             @endif
         @endforeach

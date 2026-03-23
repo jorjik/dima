@@ -6,9 +6,10 @@
 
 @section('content')
     <section class="mb-10">
-        <div class="relative overflow-hidden rounded-2xl border border-white/30 shadow-xl"
+        <div class="relative overflow-hidden rounded-2xl shadow-xl"
              style="background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 bg-black/55"></div>
+            <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
             <div class="relative p-6 md:p-8">
                 <h1 class="mb-2 text-3xl md:text-4xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
@@ -33,33 +34,35 @@
                         ])
                     @else
                         <div class="relative" data-feed-item>
-                            <div
-                                class="overflow-hidden transition-all duration-300
-                                    text-white/95
-                                    [&_article]:max-w-prose [&_article]:!text-white/95
-                                    [&_article_h1]:!text-white [&_article_h2]:!text-white [&_article_h3]:!text-white [&_article_h4]:!text-white
-                                    [&_article_p]:my-1
-                                    [&_article_h1]:mt-0 [&_article_h1]:mb-1
-                                    [&_article_h2]:mt-0 [&_article_h2]:mb-1
-                                    [&_article_h3]:mt-0 [&_article_h3]:mb-1
-                                    [&_article_h4]:mt-0 [&_article_h4]:mb-1"
-                                style="max-height: 18rem;"
-                                data-feed-preview
-                                data-collapsed-height="18rem"
-                            >
-                                @include('public.partials.post-content', [
-                                    'post' => $post,
-                                    'images' => $post->images,
-                                    'videos' => $post->videos,
-                                    'audios' => $post->audios,
-                                    'enableLightbox' => true,
-                                ])
-                            </div>
+                            <div class="relative">
+                                <div
+                                    class="overflow-hidden transition-all duration-300
+                                        text-white/95
+                                        [&_article]:max-w-prose [&_article]:!text-white/95
+                                        [&_article_h1]:!text-white [&_article_h2]:!text-white [&_article_h3]:!text-white [&_article_h4]:!text-white
+                                        [&_article_p]:my-1
+                                        [&_article_h1]:mt-0 [&_article_h1]:mb-1
+                                        [&_article_h2]:mt-0 [&_article_h2]:mb-1
+                                        [&_article_h3]:mt-0 [&_article_h3]:mb-1
+                                        [&_article_h4]:mt-0 [&_article_h4]:mb-1"
+                                    style="max-height: 18rem;"
+                                    data-feed-preview
+                                    data-collapsed-height="18rem"
+                                >
+                                    @include('public.partials.post-content', [
+                                        'post' => $post,
+                                        'images' => $post->images,
+                                        'videos' => $post->videos,
+                                        'audios' => $post->audios,
+                                        'enableLightbox' => true,
+                                    ])
+                                </div>
 
-                            <div
-                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/70 to-transparent"
-                                data-feed-gradient
-                            ></div>
+                                <div
+                                    class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black via-black/70 to-transparent"
+                                    data-feed-gradient
+                                ></div>
+                            </div>
                             <button
                                 type="button"
                                 class="feed-toggle-btn"
@@ -70,17 +73,19 @@
 
                     @if ($post->isGalleryPost && filled($post->feedCaption))
                         <div class="relative mt-2" data-caption-item>
-                            <div
-                                class="overflow-hidden transition-all duration-300 text-sm leading-6 text-white/90 whitespace-pre-line break-words"
-                                style="max-height: 8.5rem;"
-                                data-caption-preview
-                                data-collapsed-height="8.5rem"
-                            >{{ $post->feedCaption }}</div>
+                            <div class="relative">
+                                <div
+                                    class="overflow-hidden transition-all duration-300 text-sm leading-6 text-white/90 whitespace-pre-line break-words"
+                                    style="max-height: 8.5rem;"
+                                    data-caption-preview
+                                    data-collapsed-height="8.5rem"
+                                >{{ $post->feedCaption }}</div>
 
-                            <div
-                                class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent"
-                                data-caption-gradient
-                            ></div>
+                                <div
+                                    class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent"
+                                    data-caption-gradient
+                                ></div>
+                            </div>
                             <button
                                 type="button"
                                 class="feed-toggle-btn"
