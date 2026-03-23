@@ -24,16 +24,13 @@ class UserResource extends Resource
 
     protected static ?string $navigationLabel = 'Админы';
 
+    protected static ?string $navigationGroup = 'Настройки';
+
     protected static ?string $modelLabel = 'админ';
 
     protected static ?string $pluralModelLabel = 'админы';
 
-    protected static ?int $navigationSort = 80;
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
+    protected static ?int $navigationSort = 100;
 
     public static function getPages(): array
     {
