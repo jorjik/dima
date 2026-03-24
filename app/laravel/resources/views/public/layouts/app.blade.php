@@ -70,7 +70,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
             rel="stylesheet"
         >
-        @vite(['resources/css/app.css'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('styles')
         <script>
             // If Tailwind is loading, keep the page typography consistent.
@@ -93,6 +93,7 @@
 
         <header
             class="w-full border-b border-white/15 bg-black/25 relative z-10 overflow-hidden backdrop-blur"
+            data-animate
             @if(!empty($headerBgUrl))
                 style="background-image: url('{{ $headerBgUrl }}'); background-size: cover; background-position: center;"
             @endif
@@ -103,7 +104,7 @@
 
             <div class="relative max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
                 <div class="flex flex-col">
-                    <a href="{{ route('home') }}" class="font-semibold text-lg text-white">
+                    <a href="{{ route('home') }}" class="font-semibold text-lg text-white interactive-surface">
                         {{ $headerTitle }}
                     </a>
                     @if(!empty($headerTagline))
@@ -112,14 +113,14 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('home') }}" class="text-sm text-white/90 underline underline-offset-4 transition-colors duration-200 hover:text-white">
+                    <a href="{{ route('home') }}" class="text-sm text-white/90 underline underline-offset-4 transition-colors duration-200 hover:text-white interactive-surface">
                         Главная
                     </a>
                 </div>
             </div>
         </header>
 
-        <main class="relative z-10 max-w-4xl mx-auto px-4 py-8">
+        <main class="relative z-10 max-w-4xl mx-auto px-4 py-8" data-animate data-animate-delay="60">
             @yield('content')
         </main>
         @stack('scripts')

@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-    <section class="mb-8">
+    <section class="mb-8" data-animate>
         <div class="text-sm text-white/80 mb-2">
             <a href="{{ route('home') }}" class="glass-link">Главная</a>
             @if ($folder)
@@ -18,8 +18,8 @@
         <div class="text-xs text-white/70 mb-4">{{ $post->created_at?->format('d.m.Y') }}</div>
     </section>
 
-    <section class="mb-10">
-        <div class="content-panel">
+    <section class="mb-10" data-animate data-animate-delay="80">
+        <div class="content-panel interactive-surface">
             @include('public.partials.post-content', [
                 'post' => $post,
                 'images' => $images,

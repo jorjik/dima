@@ -8,7 +8,7 @@
     <div class="mb-3">
         <a
             href="{{ $postUrl }}"
-            class="group relative block h-56 md:h-64 overflow-hidden rounded-2xl shadow-xl bg-[#111]"
+            class="group relative block h-56 md:h-64 overflow-hidden rounded-2xl shadow-xl bg-[#111] interactive-surface"
         >
             @if ($bgUrl)
                 <img

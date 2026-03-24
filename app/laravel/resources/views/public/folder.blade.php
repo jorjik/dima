@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-    <section class="mb-10">
+    <section class="mb-10" data-animate>
         <div
             class="relative overflow-hidden rounded-2xl shadow-xl bg-[#111]"
             @if ($folder->background_url)
@@ -35,11 +35,11 @@
         </div>
     </section>
 
-    <section>
+    <section data-animate data-animate-delay="80">
         <h2 class="mb-4 text-xl font-semibold text-white md:text-2xl">Посты</h2>
         <div class="flex flex-col gap-4">
             @foreach ($posts as $post)
-                <article class="feed-card">
+                <article class="feed-card interactive-surface" data-animate data-animate-delay="{{ ($loop->index % 6) * 40 }}">
                     <div class="feed-date">{{ $post->created_at?->format('d.m.Y') }}</div>
 
                     <div class="feed-title">{{ $post->title }}</div>
