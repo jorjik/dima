@@ -1,3 +1,4 @@
+# Force redeploy - fix composer flag
 # Laravel app lives in app/laravel — build context = repo root
 # syntax=docker/dockerfile:1
 
@@ -36,17 +37,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j"$(nproc)" \
-        pdo \
-        pdo_mysql \
-        pdo_pgsql \
-        mbstring \
-        zip \
-        exif \
-        pcntl \
-        bcmath \
-        gd \
-        intl \
-        opcache \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    mbstring \
+    zip \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    intl \
+    opcache \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
