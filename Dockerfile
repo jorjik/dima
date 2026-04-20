@@ -1,4 +1,4 @@
-# Force redeploy - fix composer flag
+# VER 2 - Fixed composer flag
 # Laravel app lives in app/laravel — build context = repo root
 # syntax=docker/dockerfile:1
 
@@ -83,3 +83,4 @@ EXPOSE 8000
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+# Hash: 999999
