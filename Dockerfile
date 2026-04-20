@@ -18,7 +18,7 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
-    --ignore-scripts
+    --no-scripts
 
 # --- Runtime ---
 FROM php:8.3-cli-bookworm
