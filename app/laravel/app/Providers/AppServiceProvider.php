@@ -21,8 +21,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
+        if (app()->environment('production')) {
             URL::forceScheme('https');
+
+            // Force HTTPS for storage URLs to prevent mixed content
+            // when APP_URL has http:// but the site is served over https://
+            $diskUrl = config('filesystems.disks.public.url');
+            if ($diskUrl && str_starts_with($diskUrl, 'http://')) {
+                config(['filesystems.disks.public.url' => 'https://' . substr($diskUrl, 7)]);
+            }
         }
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token): string {
