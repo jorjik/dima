@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource;
 use App\Models\MediaFile;
 use App\Models\Post;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -14,14 +15,37 @@ class EditPost extends EditRecord
 {
     protected static string $resource = PostResource::class;
 
-    /**
-     * Automatically regenerate unique slug based on the current title.
-     */
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction(),
+            $this->getCancelFormAction(),
+            $this->getDeleteFormAction(),
+        ];
+    }
+
+    protected function getDeleteFormAction(): Action
+    {
+        return Action::make('deletePost')
+            ->label('Удалить')
+            ->color('danger')
+            ->icon('heroicon-o-trash')
+            ->requiresConfirmation()
+            ->authorize(static::getResource()::canDelete($this->getRecord()))
+            ->modalHeading('Удаление поста')
+            ->modalDescription('Вы уверены, что хотите удалить этот пост? Это действие нельзя отменить.')
+            ->action(function () {
+                if ($this->record) {
+                    $this->record->delete();
+                }
+                $this->redirect(PostResource::getUrl('index'));
+            });
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $currentSlug = (string) ($this->record?->slug ?? '');
         if (filled($currentSlug)) {
-            // Keep existing URLs stable when editing title/content.
             $data['slug'] = $currentSlug;
             return $data;
         }
@@ -53,10 +77,6 @@ class EditPost extends EditRecord
         return $slug;
     }
 
-    /**
-     * Runs after the Post is updated.
-     * Here we persist newly uploaded media.
-     */
     protected function afterSave(): void
     {
         /** @var Post $post */
@@ -72,7 +92,6 @@ class EditPost extends EditRecord
         $this->syncUploads($post, $videos, MediaFile::TYPE_VIDEO);
         $this->syncUploads($post, $audios, MediaFile::TYPE_AUDIO);
 
-        // Ensure cover is set and always points to an image.
         if (filled($post->cover_media_id)) {
             $cover = $post->cover;
             if (! $cover || $cover->media_type !== MediaFile::TYPE_IMAGE || (int) $cover->post_id !== (int) $post->id) {
@@ -93,21 +112,15 @@ class EditPost extends EditRecord
         $post->save();
     }
 
-    /**
-     * @param  array<int, string>  $paths
-     */
     private function syncUploads(Post $post, array $paths, string $mediaType): void
     {
-        if ($paths === []) {
-            return;
-        }
+        if ($paths === []) return;
 
         $disk = Storage::disk('public');
         $baseSort = ((int) ($post->media()->max('sort') ?? -1)) + 1;
 
         foreach ($paths as $sort => $path) {
             $path = (string) $path;
-
             $fullPath = $disk->path($path);
             $mime = is_file($fullPath) ? (@mime_content_type($fullPath) ?: null) : null;
             $sizeBytes = is_file($fullPath) ? (@filesize($fullPath) ?: null) : null;
@@ -124,10 +137,7 @@ class EditPost extends EditRecord
             }
 
             MediaFile::updateOrCreate(
-                [
-                    'post_id' => $post->id,
-                    'path' => $path,
-                ],
+                ['post_id' => $post->id, 'path' => $path],
                 [
                     'media_type' => $mediaType,
                     'original_name' => basename($path),
@@ -141,4 +151,3 @@ class EditPost extends EditRecord
         }
     }
 }
-

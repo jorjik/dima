@@ -40,9 +40,9 @@ jobs:
 
       - name: Deploy
         run: |
-          rsync -avz --delete app/laravel/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/absolutemarshall.com/
+          rsync -avz --delete app/laravel/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/html/app/laravel/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
-            cd /var/www/absolutemarshall.com &&
+            cd /var/www/html/app/laravel &&
             php artisan migrate --force &&
             php artisan config:cache &&
             php artisan route:cache &&
