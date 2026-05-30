@@ -5,15 +5,15 @@
 @endpush
 
 @section('content')
-    <section class="mb-10" data-animate>
+    <section class="mb-10" data-animate-hero>
         <div class="relative overflow-hidden rounded-2xl shadow-xl"
              style="background-color:#000; @if(!empty($heroBackgroundUrl)) background-image: url('{{ $heroBackgroundUrl }}'); @endif background-size: cover; background-position: center; aspect-ratio: 16 / 9; width: 100%;">
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
             <div class="relative p-6 md:p-16 lg:p-20 w-full flex flex-col justify-center h-full">
-                <h1 class="mb-2 text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
+                <h1 class="hero-title mb-2 text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
-                    <p class="max-w-3xl text-sm md:text-xl lg:text-2xl text-white/90 leading-relaxed">{{ $heroText }}</p>
+                    <p class="hero-text max-w-3xl text-sm md:text-xl lg:text-2xl text-white/90 leading-relaxed">{{ $heroText }}</p>
                 @endif
             </div>
         </div>
@@ -251,6 +251,31 @@
             });
         }
 
+        // ─── Hero zoom-in reveal ───
+        (function () {
+            const hero = document.querySelector('[data-animate-hero]');
+            if (!hero) return;
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) {
+                hero.classList.add('hero-reveal-in');
+                return;
+            }
+
+            const observer = new IntersectionObserver(
+                function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add('hero-reveal-in');
+                        observer.unobserve(entry.target);
+                    });
+                },
+                { root: null, rootMargin: '0px', threshold: 0.15 }
+            );
+
+            hero.classList.add('hero-reveal');
+            observer.observe(hero);
+        })();
     </script>
 @endpush
 
