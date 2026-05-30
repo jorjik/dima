@@ -6,14 +6,17 @@
 
 @section('content')
     <section class="mb-10" data-animate-hero>
-        <div class="relative overflow-hidden rounded-2xl shadow-xl"
+        <div class="relative overflow-hidden rounded-2xl shadow-xl flex items-center"
              style="background-color:#000; @if(!empty($heroBackgroundUrl)) background-image: url('{{ $heroBackgroundUrl }}'); @endif background-size: cover; background-position: center; aspect-ratio: 16 / 9; width: 100%;">
+            {{-- Overlay --}}
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
+            {{-- Subtle border shine --}}
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
-            <div class="relative p-6 md:p-16 lg:p-20 w-full flex flex-col justify-center h-full">
-                <h1 class="hero-title mb-2 text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
+            {{-- Content --}}
+            <div class="relative p-6 md:p-12 lg:p-16 w-full flex flex-col justify-center h-full">
+                <h1 class="hero-title mb-2 text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
-                    <p class="hero-text max-w-3xl text-sm md:text-xl lg:text-2xl text-white/90 leading-relaxed">{{ $heroText }}</p>
+                    <p class="hero-text max-w-3xl text-sm md:text-xl text-white/90 leading-relaxed">{{ $heroText }}</p>
                 @endif
             </div>
         </div>
@@ -250,8 +253,6 @@
                 },
             });
         }
-
-
     </script>
 @endpush
 
