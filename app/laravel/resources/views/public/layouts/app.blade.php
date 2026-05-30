@@ -80,6 +80,19 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
+    <style>
+        [data-animate],
+        [data-animate-hero] {
+            opacity: 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            [data-animate],
+            [data-animate-hero] {
+                opacity: 1;
+            }
+        }
+    </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
     <script>

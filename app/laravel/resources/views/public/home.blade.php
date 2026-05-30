@@ -251,31 +251,7 @@
             });
         }
 
-        // ─── Hero zoom-in reveal ───
-        (function () {
-            const hero = document.querySelector('[data-animate-hero]');
-            if (!hero) return;
 
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reduceMotion) {
-                hero.classList.add('hero-reveal-in');
-                return;
-            }
-
-            const observer = new IntersectionObserver(
-                function (entries) {
-                    entries.forEach(function (entry) {
-                        if (!entry.isIntersecting) return;
-                        entry.target.classList.add('hero-reveal-in');
-                        observer.unobserve(entry.target);
-                    });
-                },
-                { root: null, rootMargin: '0px', threshold: 0.15 }
-            );
-
-            hero.classList.add('hero-reveal');
-            observer.observe(hero);
-        })();
     </script>
 @endpush
 
