@@ -88,7 +88,6 @@ class PostResource extends Resource
                                 ->searchable()
                                 ->preload()
                                 ->nullable()
-                                ->createOptionButton()
                                 ->createOptionForm([
                                     TextInput::make('title')
                                         ->label('Название папки')
