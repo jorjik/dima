@@ -1,12 +1,84 @@
-# Deployment Rule
+# Deployment via SSH
 
-When deploying Laravel applications, use SSH-based deployment.
+При деплое Laravel-приложения на сервер используй **SSH** с паролем из `.env`.
 
-## Prerequisites
-- SSH_PRIVATE_KEY in GitHub Secrets
-- DEPLOY_HOST and DEPLOY_USER secrets
-- PHP/Composer/Node on server
+## SSH доступы
 
-## Method
-GitHub Actions workflow deploys via rsync over SSH after building assets.
-Manual: git pull, composer install --no-dev, npm run build, artisan migrate --force.
+Читать из `app/laravel/.env` — там лежат:
+
+```
+DEPLOY_HOST=185.237.207.32
+DEPLOY_USER=root
+DEPLOY_PASSWORD=<пароль>
+```
+
+Пароль читать командой: `grep DEPLOY_PASSWORD app/laravel/.env`
+
+## Полный деплой
+
+```bash
+# 1. Запушить изменения в main (если не запушил)
+git add -A
+git commit -m "описание изменений"
+git push origin main
+
+# 2. SSH на сервер
+sshpass -p '<пароль>' ssh -o StrictHostKeyChecking=no root@185.237.207.32
+
+# 3. На сервере — стянуть код
+cd /var/www/html
+git pull origin main
+
+# 4. Обновить Laravel
+cd app/laravel
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan storage:link --force || true
+
+# 5. Выйти
+exit
+```
+
+## Если git pull конфликтует
+
+На сервере могут быть локальные изменения (stash от предыдущего деплоя или недодеплоенные правки).
+
+### Вариант А — принять версию из репозитория (рекомендуется)
+
+```bash
+cd /var/www/html
+
+# Сбросить конфликтные файлы до версии из репозитория
+git checkout HEAD -- app/laravel/app/Filament/Resources/SiteSettingResource.php
+git checkout HEAD -- app/laravel/app/Models/SiteSetting.php
+git checkout HEAD -- app/laravel/resources/views/public/layouts/app.blade.php
+# ... добавить другие конфликтные файлы
+
+# Удалить untracked файлы, которые мешают pull
+rm -f app/laravel/database/migrations/2026_05_30_071839_add_opacity_fields_to_site_settings_table.php
+rm -f app/laravel/config/filament.php
+
+git add -A
+git stash drop
+git pull origin main
+```
+
+### Вариант Б — stash + pop (если локальные правки важны)
+
+```bash
+cd /var/www/html
+rm -f app/laravel/database/migrations/2026_05_30_071839_add_opacity_fields_to_site_settings_table.php
+rm -f app/laravel/config/filament.php
+git stash
+git pull origin main
+git stash pop
+```
+
+## Важно
+
+- `sshpass` должен быть установлен. Если нет: `apt install sshpass`
+- Не менять SSH-доступы вручную — они хранятся в `.env`
+- После деплоя всегда проверять, что `php artisan migrate --force` выполнился
+- На сервере Vite **не работает** — не пытаться его запускать
