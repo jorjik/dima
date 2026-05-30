@@ -75,25 +75,8 @@
                     @endif
 
                     @if ($post->isGalleryPost && filled($post->feedCaption))
-                        <div class="relative mt-2" data-caption-item>
-                            <div class="relative">
-                                <div
-                                    class="overflow-hidden transition-all duration-300 text-sm leading-6 text-white/90 whitespace-pre-line break-words"
-                                    style="max-height: 8.5rem;"
-                                    data-caption-preview
-                                    data-collapsed-height="8.5rem"
-                                >{{ $post->feedCaption }}</div>
-
-                                <div
-                                    class="hidden pointer-events-none absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-black via-black/70 to-transparent"
-                                    data-caption-gradient
-                                ></div>
-                            </div>
-                            <button
-                                type="button"
-                                class="feed-toggle-btn"
-                                data-caption-toggle
-                            >Раскрыть</button>
+                        <div class="mt-2 text-sm leading-6 text-white/90 whitespace-pre-line break-words">
+                            {{ $post->feedCaption }}
                         </div>
                     @endif
                 </article>
