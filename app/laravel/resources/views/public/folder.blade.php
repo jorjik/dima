@@ -28,9 +28,7 @@
                     {{ $pc }} {{ $postsLabel }}
                 </div>
                 <h1 class="mb-4 text-3xl font-bold tracking-tight md:text-4xl">{{ $folder->title }}</h1>
-                <a href="{{ route('home') }}" class="text-sm text-white/90 underline underline-offset-4 hover:text-white">
-                    Назад на главную
-                </a>
+
             </div>
         </div>
     </section>

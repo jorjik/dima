@@ -17,6 +17,11 @@ class SiteSetting extends Model
         'home_hero_text',
         'home_hero_background_path',
         'hero_background_opacity',
+        'social_telegram',
+        'social_vk',
+        'social_instagram',
+        'social_youtube',
+        'social_whatsapp',
         'home_meta_title',
         'home_meta_description',
     ];

@@ -7,10 +7,10 @@
 @section('content')
     <section class="mb-8" data-animate>
         <div class="text-sm text-white/80 mb-2">
-            <a href="{{ route('home') }}" class="glass-link">Главная</a>
             @if ($folder)
-                <span class="text-white/55"> / </span>
                 <a href="{{ route('folder.show', ['slug' => $folder->slug]) }}" class="glass-link">{{ $folder->title }}</a>
+            @else
+                &nbsp;
             @endif
         </div>
 
