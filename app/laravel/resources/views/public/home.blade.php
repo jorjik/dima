@@ -31,7 +31,7 @@
 
                     <div class="feed-title">{{ $post->title }}</div>
 
-                    @if ($post->isGalleryPost && $post->hasGallery)
+                    @if ($post->isGalleryPost)
                         @include('public.partials.feed-gallery-card', [
                             'post' => $post,
                         ])

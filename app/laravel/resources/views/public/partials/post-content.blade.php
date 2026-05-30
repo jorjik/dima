@@ -42,7 +42,7 @@
         .post-content img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; }
     </style>
     <article class="post-content text-base leading-8 text-white/85 mb-3">
-        {!! \Illuminate\Support\Str::markdown((string) ($contentPost->body_markdown ?? '')) !!}
+        {!! \Illuminate\Support\Str::markdown(html_entity_decode((string) ($contentPost->body_markdown ?? ''), ENT_QUOTES, 'UTF-8')) !!}
     </article>
 @endif
 

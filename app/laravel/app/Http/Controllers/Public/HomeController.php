@@ -95,7 +95,7 @@ class HomeController extends Controller
                 return;
             }
 
-            $asHtml = Str::markdown($rawMarkdown);
+            $asHtml = Str::markdown(html_entity_decode($rawMarkdown, ENT_QUOTES, 'UTF-8'));
             $normalizedHtml = str_ireplace(
                 ['</p>', '</li>', '<br>', '<br/>', '<br />'],
                 "\n",
