@@ -30,7 +30,7 @@ class HomeController extends Controller
                 }
             }
 
-            if (! $cover) {
+            if (!$cover) {
                 $cover = $post->images()->orderBy('sort')->first();
                 $post->setRelation('cover', $cover);
             }
@@ -65,7 +65,7 @@ class HomeController extends Controller
             });
 
             $galleryMedia = $post->media
-                ->filter(fn (MediaFile $m): bool => in_array($m->media_type, [MediaFile::TYPE_IMAGE, MediaFile::TYPE_VIDEO], true))
+                ->filter(fn(MediaFile $m): bool => in_array($m->media_type, [MediaFile::TYPE_IMAGE, MediaFile::TYPE_VIDEO], true))
                 ->sortBy([
                     ['sort', 'asc'],
                     ['created_at', 'asc'],
@@ -108,6 +108,7 @@ class HomeController extends Controller
         });
 
         $siteSetting = SiteSetting::query()->first();
+        $heroBackgroundOpacity = max(0, min(100, (int) ($siteSetting?->hero_background_opacity ?? 55)));
         $heroBackgroundUrl = $siteSetting?->home_hero_background_path
             ? Storage::disk('public')->url($siteSetting->home_hero_background_path)
             : 'https://picsum.photos/seed/dima-hero/1200/600';
@@ -117,6 +118,7 @@ class HomeController extends Controller
             'heroTitle' => $siteSetting?->home_hero_title ?: 'Фото-видео альбом жизни',
             'heroText' => $siteSetting?->home_hero_text ?: 'Посты внутри папок. Обложки и фон берутся только из фото.',
             'heroBackgroundUrl' => $heroBackgroundUrl,
+            'heroBackgroundOpacity' => $heroBackgroundOpacity,
         ]);
     }
 }

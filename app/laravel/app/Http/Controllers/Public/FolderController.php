@@ -21,7 +21,7 @@ class FolderController extends Controller
         // Fallback: фон из обложки самого нового поста (только фото).
         $bg = $folder->backgroundMedia;
 
-        if (! $bg) {
+        if (!$bg) {
             $newestPost = $folder->posts()
                 ->with('cover')
                 ->orderByDesc('created_at')
@@ -35,7 +35,7 @@ class FolderController extends Controller
                 }
             }
 
-            if (! $bg) {
+            if (!$bg) {
                 $bg = $newestPost?->images()->where('media_type', MediaFile::TYPE_IMAGE)->orderBy('sort')->first();
             }
         }
@@ -58,7 +58,7 @@ class FolderController extends Controller
                     }
                 }
 
-                if (! $cover) {
+                if (!$cover) {
                     $cover = $post->images()->orderBy('sort')->first();
                     $post->setRelation('cover', $cover);
                 }
@@ -81,9 +81,13 @@ class FolderController extends Controller
                 return $post;
             });
 
+        $siteSetting = \App\Models\SiteSetting::query()->first();
+        $heroBackgroundOpacity = max(0, min(100, (int) ($siteSetting?->hero_background_opacity ?? 55)));
+
         return view('public.folder', [
             'folder' => $folder,
             'posts' => $posts,
+            'heroBackgroundOpacity' => $heroBackgroundOpacity,
         ]);
     }
 }

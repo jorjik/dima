@@ -61,6 +61,15 @@ class SiteSettingResource extends Resource
                     'image/svg+xml',
                 ]),
 
+            TextInput::make('header_background_opacity')
+                ->label('Непрозрачность фона шапки')
+                ->helperText('Величина непрозрачности чёрного фона шапки (0 — полностью прозрачно, 100 — чёрный). По умолчанию 25.')
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(100)
+                ->default(25)
+                ->suffix('%'),
+
             FileUpload::make('site_background_path')
                 ->label('Фон всего сайта (картинка)')
                 ->image()
@@ -117,6 +126,15 @@ class SiteSettingResource extends Resource
                     'image/gif',
                     'image/svg+xml',
                 ]),
+
+            TextInput::make('hero_background_opacity')
+                ->label('Непрозрачность фона Hero-блока')
+                ->helperText('Величина непрозрачности чёрного наложения на картинку блока (0 — полностью прозрачно, 100 — чёрный). По умолчанию 55.')
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(100)
+                ->default(55)
+                ->suffix('%'),
         ]);
     }
 

@@ -12,7 +12,7 @@
                 style="background-image: url('{{ $folder->background_url }}'); background-size: cover; background-position: center;"
             @endif
         >
-            <div class="absolute inset-0 bg-black/55"></div>
+            <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
             <div class="relative p-6 md:p-8 text-white">
                 @php

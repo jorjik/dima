@@ -10,11 +10,13 @@ class SiteSetting extends Model
         'header_title',
         'header_tagline',
         'header_background_path',
+        'header_background_opacity',
         'site_background_path',
         'site_background_overlay_percent',
         'home_hero_title',
         'home_hero_text',
         'home_hero_background_path',
+        'hero_background_opacity',
         'home_meta_title',
         'home_meta_description',
     ];
