@@ -120,6 +120,10 @@ class SiteSettingResource extends Resource
                             TextInput::make('social_whatsapp')
                                 ->label('WhatsApp')
                                 ->placeholder('https://wa.me/...'),
+
+                            TextInput::make('social_tiktok')
+                                ->label('TikTok')
+                                ->placeholder('https://www.tiktok.com/@...'),
                         ]),
 
                     \Filament\Forms\Components\Tabs\Tab::make('SEO')

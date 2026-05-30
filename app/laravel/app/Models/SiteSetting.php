@@ -22,6 +22,7 @@ class SiteSetting extends Model
         'social_instagram',
         'social_youtube',
         'social_whatsapp',
+        'social_tiktok',
         'home_meta_title',
         'home_meta_description',
     ];
