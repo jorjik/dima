@@ -39,6 +39,7 @@ class MediaRelationManager extends RelationManager
                 ->disk('public')
                 ->directory('posts/uploads')
                 ->maxSize(204800)
+                ->preserveFilenames()
                 ->acceptedFileTypes([
                     'image/jpeg',
                     'image/png',
