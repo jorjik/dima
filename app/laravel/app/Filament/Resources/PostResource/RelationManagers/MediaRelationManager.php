@@ -37,6 +37,7 @@ class MediaRelationManager extends RelationManager
                 ->required(fn (string $operation): bool => $operation === 'create')
                 ->disk('public')
                 ->directory('posts/uploads')
+                ->maxSize(204800)
                 ->acceptedFileTypes([
                     'image/jpeg',
                     'image/png',

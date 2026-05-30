@@ -151,6 +151,7 @@ class PostResource extends Resource
                                 ->hiddenOn('edit')
                                 ->disk('public')
                                 ->directory('posts/photos')
+                                ->maxSize(51200)
                                 ->dehydrated(false)
                                 ->acceptedFileTypes([
                                     'image/jpeg',
@@ -166,6 +167,7 @@ class PostResource extends Resource
                                 ->hiddenOn('edit')
                                 ->disk('public')
                                 ->directory('posts/videos')
+                                ->maxSize(204800)
                                 ->dehydrated(false)
                                 ->acceptedFileTypes([
                                     'video/mp4',
@@ -181,6 +183,7 @@ class PostResource extends Resource
                                 ->hiddenOn('edit')
                                 ->disk('public')
                                 ->directory('posts/audios')
+                                ->maxSize(204800)
                                 ->dehydrated(false)
                                 ->acceptedFileTypes([
                                     'audio/mpeg',
