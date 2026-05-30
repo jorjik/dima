@@ -34,6 +34,7 @@ class MediaRelationManager extends RelationManager
         return $form->schema([
             FileUpload::make('path')
                 ->label('Файл')
+                ->helperText('Максимальный размер: 200 МБ')
                 ->required(fn (string $operation): bool => $operation === 'create')
                 ->disk('public')
                 ->directory('posts/uploads')

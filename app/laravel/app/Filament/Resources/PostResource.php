@@ -145,6 +145,7 @@ class PostResource extends Resource
                         ->schema([
                             FileUpload::make('photos')
                                 ->label('Фото (обложка берется с первого фото)')
+                                ->helperText('Максимальный размер: 50 МБ')
                                 ->image()
                                 ->multiple()
                                 ->reorderable()
@@ -163,6 +164,7 @@ class PostResource extends Resource
 
                             FileUpload::make('videos')
                                 ->label('Видео (не используется для фона/обложки)')
+                                ->helperText('Максимальный размер: 200 МБ')
                                 ->multiple()
                                 ->hiddenOn('edit')
                                 ->disk('public')
@@ -179,6 +181,7 @@ class PostResource extends Resource
 
                             FileUpload::make('audios')
                                 ->label('Аудио (не используется для фона/обложки)')
+                                ->helperText('Максимальный размер: 200 МБ')
                                 ->multiple()
                                 ->hiddenOn('edit')
                                 ->disk('public')
