@@ -24,27 +24,24 @@
 @endphp
 
 @if (filled(trim((string) ($contentPost->body_markdown ?? ''))))
-    <article
-        class="text-base leading-8 text-base-content/85 mb-3
-            [word-break:break-word] [overflow-wrap:anywhere] whitespace-normal
-            [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:leading-tight [&_h1]:mt-8 [&_h1]:mb-5 [&_h1]:text-base-content/95
-            [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:leading-tight [&_h2]:mt-7 [&_h2]:mb-4 [&_h2]:text-base-content/95
-            [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:leading-tight [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-base-content/95
-            [&_h4]:text-lg [&_h4]:font-medium [&_h4]:mt-5 [&_h4]:mb-3 [&_h4]:text-base-content/95
-            [&_p]:my-4 [&_p]:[word-break:break-word]
-            [&_ul]:my-4 [&_ul]:pl-7 [&_ul]:list-disc
-            [&_ol]:my-4 [&_ol]:pl-7 [&_ol]:list-decimal
-            [&_li]:my-1.5 [&_li]:pl-1
-            [&_strong]:font-bold [&_strong]:text-base-content/95
-            [&_em]:italic
-            [&_blockquote]:my-5 [&_blockquote]:border-l-4 [&_blockquote]:border-primary/35 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-base-content/80
-            [&_a]:text-primary/80 [&_a]:underline [&_a]:underline-offset-4
-            [&_hr]:my-6 [&_hr]:border-base-300
-            [&_code]:px-2 [&_code]:py-1 [&_code]:rounded-md [&_code]:bg-base-200 [&_code]:text-base-content/90 [&_code]:text-sm
-            [&_pre]:my-5 [&_pre]:p-4 [&_pre]:rounded-xl [&_pre]:overflow-x-auto [&_pre]:bg-base-200 [&_pre]:text-base-content/90 [&_pre]:text-sm
-            [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit
-        "
-    >
+    <style>
+        .post-content {
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            white-space: normal;
+        }
+        .post-content h1 { font-size: 1.875rem; font-weight: 700; line-height: 1.25; margin-top: 2rem; margin-bottom: 1.25rem; color: #f8fafc; }
+        .post-content h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.25; margin-top: 1.75rem; margin-bottom: 1rem; color: #f8fafc; }
+        .post-content h3 { font-size: 1.25rem; font-weight: 600; line-height: 1.25; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #f8fafc; }
+        .post-content p { margin-top: 1rem; margin-bottom: 1rem; }
+        .post-content ul { margin: 1rem 0; padding-left: 1.75rem; list-style-type: disc; }
+        .post-content ol { margin: 1rem 0; padding-left: 1.75rem; list-style-type: decimal; }
+        .post-content li { margin: 0.375rem 0; padding-left: 0.25rem; }
+        .post-content strong { font-weight: 700; color: #f8fafc; }
+        .post-content blockquote { margin: 1.25rem 0; border-left: 4px solid rgba(255,255,255,0.2); padding-left: 1rem; font-style: italic; opacity: 0.8; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; }
+    </style>
+    <article class="post-content text-base leading-8 text-white/85 mb-3">
         {!! \Illuminate\Support\Str::markdown((string) ($contentPost->body_markdown ?? '')) !!}
     </article>
 @endif
