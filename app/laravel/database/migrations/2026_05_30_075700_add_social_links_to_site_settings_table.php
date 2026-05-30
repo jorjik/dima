@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('social_instagram')->nullable()->after('social_vk');
             $table->string('social_youtube')->nullable()->after('social_instagram');
             $table->string('social_whatsapp')->nullable()->after('social_youtube');
+            $table->string('social_tiktok')->nullable()->after('social_whatsapp');
         });
     }
 

@@ -7,14 +7,11 @@
 @section('content')
     <section class="mb-10" data-animate>
         <div class="parallax-hero relative overflow-hidden rounded-2xl shadow-xl"
-             style="aspect-ratio: 16 / 9; width: 100%;">
-            {{-- Parallax background layer (extends beyond container so translateY doesn't reveal edges) --}}
+             style="aspect-ratio: 16 / 9; width: 100%; background-color: #000;">
+            {{-- Parallax background layer --}}
             @if (!empty($heroBackgroundUrl))
-                <div class="parallax-bg absolute"
-                     style="top: -15%; left: -5%; right: -5%; bottom: -15%; background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center;"></div>
-            @else
-                <div class="parallax-bg absolute"
-                     style="top: -15%; left: -5%; right: -5%; bottom: -15%; background-color:#111;"></div>
+                <div class="parallax-bg absolute inset-0"
+                     style="top: -20%; bottom: -20%; left: 0; right: 0; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center; transform: scale(1.1);"></div>
             @endif
             {{-- Overlay --}}
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
@@ -283,11 +280,15 @@
                 const viewportCenter = window.innerHeight / 2;
                 const offset = heroCenter - viewportCenter;
 
-                // parallax factor: 0.25 = background moves at 25% of scroll speed
-                const factor = 0.25;
-                const translateY = offset * factor;
+                // parallax factor: 0.15 is safer for 20% bleed
+                const factor = 0.15;
+                let translateY = offset * factor;
 
-                bg.style.transform = 'translate3d(0, ' + translateY + 'px, 0)';
+                // Clamp to prevent reveals (approx 15% of height to be safe)
+                const maxMove = rect.height * 0.18;
+                translateY = Math.max(-maxMove, Math.min(maxMove, translateY));
+
+                bg.style.transform = 'translate3d(0, ' + translateY + 'px, 0) scale(1.1)';
                 ticking = false;
             };
 
