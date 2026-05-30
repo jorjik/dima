@@ -6,16 +6,8 @@
 
 @section('content')
     <section class="mb-10" data-animate>
-        <div class="relative overflow-hidden rounded-2xl shadow-xl flex items-center hero-dynamic-height"
-             style="background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center; aspect-ratio: 16 / 9; min-height: auto;">
-            <style>
-                @media (min-width: 768px) {
-                    .hero-dynamic-height { 
-                        aspect-ratio: auto !important;
-                        min-height: 650px !important; 
-                    }
-                }
-            </style>
+        <div class="relative overflow-hidden rounded-2xl shadow-xl"
+             style="background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center; aspect-ratio: 16 / 9; width: 100%;">
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
             <div class="relative p-6 md:p-16 lg:p-20 w-full flex flex-col justify-center h-full">
