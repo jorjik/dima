@@ -6,10 +6,21 @@
 
 @section('content')
     <section class="mb-10" data-animate>
-        <div class="relative overflow-hidden rounded-2xl shadow-xl"
-             style="background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center; aspect-ratio: 16 / 9; width: 100%;">
+        <div class="parallax-hero relative overflow-hidden rounded-2xl shadow-xl"
+             style="aspect-ratio: 16 / 9; width: 100%;">
+            {{-- Parallax background layer (extends beyond container so translateY doesn't reveal edges) --}}
+            @if (!empty($heroBackgroundUrl))
+                <div class="parallax-bg absolute"
+                     style="top: -15%; left: -5%; right: -5%; bottom: -15%; background-color:#111; background-image: url('{{ $heroBackgroundUrl }}'); background-size: cover; background-position: center;"></div>
+            @else
+                <div class="parallax-bg absolute"
+                     style="top: -15%; left: -5%; right: -5%; bottom: -15%; background-color:#111;"></div>
+            @endif
+            {{-- Overlay --}}
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>
+            {{-- Subtle border shine --}}
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
+            {{-- Content --}}
             <div class="relative p-6 md:p-16 lg:p-20 w-full flex flex-col justify-center h-full">
                 <h1 class="mb-2 text-2xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
@@ -250,6 +261,54 @@
                 },
             });
         }
+
+        // ─── Parallax hero ───
+        (function () {
+            const hero = document.querySelector('.parallax-hero');
+            if (!hero) return;
+
+            const bg = hero.querySelector('.parallax-bg');
+            if (!bg) return;
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+
+            let ticking = false;
+            let rect = hero.getBoundingClientRect();
+
+            const updateParallax = () => {
+                rect = hero.getBoundingClientRect();
+
+                const heroCenter = rect.top + rect.height / 2;
+                const viewportCenter = window.innerHeight / 2;
+                const offset = heroCenter - viewportCenter;
+
+                // parallax factor: 0.25 = background moves at 25% of scroll speed
+                const factor = 0.25;
+                const translateY = offset * factor;
+
+                bg.style.transform = 'translate3d(0, ' + translateY + 'px, 0)';
+                ticking = false;
+            };
+
+            const onScroll = () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            };
+
+            const onResize = () => {
+                rect = hero.getBoundingClientRect();
+                onScroll();
+            };
+
+            // Initial position
+            updateParallax();
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onResize, { passive: true });
+        })();
     </script>
 @endpush
 
