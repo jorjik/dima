@@ -58,9 +58,9 @@ class PostResource extends Resource
                                 ->required()
                                 ->maxLength(255),
 
-                            MarkdownEditor::make('body_markdown')
-                                ->label('Текст (Markdown)')
-                                ->placeholder('Списки, **жирный**, ссылки…')
+                            Forms\Components\RichEditor::make('body_markdown')
+                                ->label('Текст поста')
+                                ->placeholder('Начните писать здесь…')
                                 ->toolbarButtons([
                                     'attachFiles',
                                     'bold',
@@ -70,15 +70,16 @@ class PostResource extends Resource
                                     'blockquote',
                                     'bulletList',
                                     'orderedList',
-                                    'codeBlock',
-                                    'table',
+                                    'h2',
+                                    'h3',
                                     'undo',
                                     'redo',
                                 ])
                                 ->fileAttachmentsDisk('public')
-                                ->fileAttachmentsDirectory('posts/markdown-attachments')
+                                ->fileAttachmentsDirectory('posts/rich-attachments')
                                 ->fileAttachmentsVisibility('public')
-                                ->minHeight('16rem')
+                                ->columnSpanFull()
+                                ->extraInputAttributes(['style' => 'white-space: pre-wrap; word-break: break-word;'])
                                 ->nullable(),
 
                             Select::make('folder_id')

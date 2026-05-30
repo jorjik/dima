@@ -25,12 +25,13 @@
 
 @if (filled(trim((string) ($contentPost->body_markdown ?? ''))))
     <article
-        class="text-base leading-8 break-words text-base-content/85 mb-3
+        class="text-base leading-8 text-base-content/85 mb-3
+            [word-break:break-word] [overflow-wrap:anywhere] whitespace-normal
             [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:leading-tight [&_h1]:mt-8 [&_h1]:mb-5 [&_h1]:text-base-content/95
             [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:leading-tight [&_h2]:mt-7 [&_h2]:mb-4 [&_h2]:text-base-content/95
             [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:leading-tight [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-base-content/95
             [&_h4]:text-lg [&_h4]:font-medium [&_h4]:mt-5 [&_h4]:mb-3 [&_h4]:text-base-content/95
-            [&_p]:my-4
+            [&_p]:my-4 [&_p]:[word-break:break-word]
             [&_ul]:my-4 [&_ul]:pl-7 [&_ul]:list-disc
             [&_ol]:my-4 [&_ol]:pl-7 [&_ol]:list-decimal
             [&_li]:my-1.5 [&_li]:pl-1
