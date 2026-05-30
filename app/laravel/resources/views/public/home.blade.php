@@ -14,9 +14,9 @@
             <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.28)]"></div>
             {{-- Content --}}
             <div class="relative p-6 md:p-12 lg:p-16 w-full flex flex-col justify-center h-full">
-                <h1 class="hero-title mb-2 text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight text-white">{{ $heroTitle }}</h1>
+                <h1 class="hero-title mb-2 text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight text-white" style="text-shadow: 4px 4px 8px rgba(54,40,39,0.48);">{{ $heroTitle }}</h1>
                 @if (filled($heroText))
-                    <p class="hero-text max-w-3xl text-sm md:text-xl text-white/90 leading-relaxed">{{ $heroText }}</p>
+                    <p class="hero-text max-w-3xl text-sm md:text-xl text-white/90 leading-relaxed" style="text-shadow: 4px 4px 8px rgba(54,40,39,0.48);">{{ $heroText }}</p>
                 @endif
             </div>
         </div>
