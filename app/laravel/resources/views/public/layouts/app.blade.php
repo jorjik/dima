@@ -169,7 +169,8 @@
     <footer class="relative z-10 border-t border-white/10 mt-12" data-animate data-animate-delay="100">
         <div class="max-w-4xl mx-auto px-4 py-6 text-center">
             <a href="https://master-jenya.com" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white/90 transition-colors interactive-surface">
+               class="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white/90 transition-colors interactive-surface"
+               style="text-shadow: 4px 4px 8px rgba(54,40,39,0.48);">
                 Делаем программы с
                 <span class="text-red-400/80 hover:text-red-400 transition-colors">❤️</span>
                 <span class="text-white/40">:</span>
