@@ -81,7 +81,7 @@ class FolderController extends Controller
                 return $post;
             });
 
-        $siteSetting = \App\Models\SiteSetting::query()->first();
+        $siteSetting = \App\Models\SiteSetting::firstCached();
         $heroBackgroundOpacity = max(0, min(100, (int) ($siteSetting?->hero_background_opacity ?? 55)));
 
         return view('public.folder', [

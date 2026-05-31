@@ -107,7 +107,7 @@ class HomeController extends Controller
             $post->feedCaption = trim($plain);
         });
 
-        $siteSetting = SiteSetting::query()->first();
+        $siteSetting = SiteSetting::firstCached();
         $heroBackgroundOpacity = max(0, min(100, (int) ($siteSetting?->hero_background_opacity ?? 55)));
         $heroBackgroundUrl = $siteSetting?->home_hero_background_path
             ? Storage::disk('public')->url($siteSetting->home_hero_background_path)

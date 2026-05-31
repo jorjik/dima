@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class SiteSetting extends Model
 {
@@ -32,6 +33,24 @@ class SiteSetting extends Model
         return [
             'site_background_overlay_percent' => 'integer',
         ];
+    }
+
+    public static function firstCached(): ?self
+    {
+        return Cache::remember('site_setting', 3600, function () {
+            return static::query()->first();
+        });
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            Cache::forget('site_setting');
+        });
+
+        static::deleted(function () {
+            Cache::forget('site_setting');
+        });
     }
 }
 

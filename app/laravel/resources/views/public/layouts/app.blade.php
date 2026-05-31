@@ -2,7 +2,7 @@
 <html lang="ru">
 @php
     /** @var \App\Models\SiteSetting|null $setting */
-    $setting = \App\Models\SiteSetting::query()->first();
+    $setting = \App\Models\SiteSetting::firstCached();
     $headerTitle = $setting?->header_title ?: 'Альбом жизни';
     $headerTagline = $setting?->header_tagline;
     $headerBgUrl = $setting?->header_background_path
