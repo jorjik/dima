@@ -94,6 +94,7 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" integrity="sha384-qlUhevqmCF5AxtnfkF0zXJClBzA6GJuX/UrLejCfE61bBGt+zo/My0AJ+ojVmUSb" crossorigin="anonymous" />
     @stack('styles')
     <script>
         // If Tailwind is loading, keep the page typography consistent.
@@ -179,6 +180,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js" integrity="sha384-BodKYo5iRmFaqEaP1o8AAu9hCHqLvNhSWEg12QF1IjPnl1SgsrwQMSMKUB4POJ18" crossorigin="anonymous"></script>
     @stack('scripts')
 </body>
 
