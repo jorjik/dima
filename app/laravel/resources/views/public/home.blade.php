@@ -1,7 +1,19 @@
 @extends('public.layouts.app')
 
+@if (!empty($heroBackgroundUrl))
+    @push('styles')
+        <link rel="preload" as="image" href="{{ $heroBackgroundUrl }}" fetchpriority="high">
+    @endpush
+@endif
+
+@if (isset($recentPosts) && $recentPosts->isNotEmpty() && $firstCoverUrl = $recentPosts->first()->cover_url)
+    @push('styles')
+        <link rel="preload" as="image" href="{{ $firstCoverUrl }}" fetchpriority="high">
+    @endpush
+@endif
+
 @section('content')
-    <section class="mb-10" data-animate-hero>
+    <section class="mb-10">
         <div class="relative overflow-hidden rounded-2xl shadow-xl flex items-center"
              style="background-color:#000; @if(!empty($heroBackgroundUrl)) background-image: url('{{ $heroBackgroundUrl }}'); @endif background-size: cover; background-position: center; aspect-ratio: 16 / 9; width: 100%;">
             {{-- Overlay --}}
