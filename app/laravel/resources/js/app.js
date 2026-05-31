@@ -80,10 +80,58 @@ const initLazyBackgrounds = () => {
     }
 };
 
+/**
+ * Lazy-load gallery videos using IntersectionObserver.
+ * Videos with data-video-lazy have preload="none" and data-src on <source>.
+ * When they enter the viewport (300px before), we activate them:
+ * move data-src -> src, change preload to "metadata", and load.
+ */
+const initLazyVideos = () => {
+    const lazyVids = document.querySelectorAll('video[data-video-lazy]');
+    if (!lazyVids.length) return;
+
+    const activateVideo = (video) => {
+        // Move data-src from <source> to src
+        const source = video.querySelector('source[data-src]');
+        if (source) {
+            source.src = source.dataset.src;
+            source.removeAttribute('data-src');
+        }
+
+        // Change preload to metadata so browser loads the first frame
+        video.preload = 'metadata';
+
+        // Force the browser to start loading metadata
+        video.load();
+
+        video.removeAttribute('data-video-lazy');
+    };
+
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    activateVideo(entry.target);
+                    observer.unobserve(entry.target);
+                });
+            },
+            { rootMargin: '300px 0px' },
+        );
+
+        lazyVids.forEach((el) => observer.observe(el));
+    } else {
+        // Fallback: activate immediately
+        lazyVids.forEach((el) => activateVideo(el));
+    }
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initRevealAnimations, { once: true });
     document.addEventListener('DOMContentLoaded', initLazyBackgrounds, { once: true });
+    document.addEventListener('DOMContentLoaded', initLazyVideos, { once: true });
 } else {
     initRevealAnimations();
     initLazyBackgrounds();
+    initLazyVideos();
 }

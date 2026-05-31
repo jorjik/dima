@@ -106,8 +106,8 @@
                     class="relative block h-44 md:h-48 overflow-hidden rounded-2xl bg-[#111]"
                 >
                     @if ($isVideo)
-                        <video muted playsinline preload="metadata" class="h-full w-full object-cover">
-                            <source src="{{ $media->url }}" type="{{ $media->mime ?: 'video/mp4' }}">
+                        <video muted playsinline preload="none" class="h-full w-full object-cover" data-video-lazy>
+                            <source data-src="{{ $media->url }}" type="{{ $media->mime ?: 'video/mp4' }}">
                         </video>
                         <span class="absolute inset-0 grid place-items-center bg-black/20">
                             <span class="rounded-full bg-black/60 px-3 py-1 text-xs">Видео</span>
@@ -137,8 +137,8 @@
                     class="relative block h-44 md:h-48 overflow-hidden rounded-2xl bg-[#111]"
                 >
                     @if ($isVideo)
-                        <video muted playsinline preload="metadata" class="h-full w-full object-cover">
-                            <source src="{{ $media->url }}" type="{{ $media->mime ?: 'video/mp4' }}">
+                        <video muted playsinline preload="none" class="h-full w-full object-cover" data-video-lazy>
+                            <source data-src="{{ $media->url }}" type="{{ $media->mime ?: 'video/mp4' }}">
                         </video>
                         <span class="absolute inset-0 grid place-items-center bg-black/20">
                             <span class="rounded-full bg-black/60 px-3 py-1 text-xs">Видео</span>
