@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\PostResource\RelationManagers;
 
+use App\Helpers\ImageHelper;
 use App\Models\MediaFile;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -211,6 +212,7 @@ class MediaRelationManager extends RelationManager
         $width = null;
         $height = null;
         if ($mediaType === MediaFile::TYPE_IMAGE && is_file($fullPath)) {
+            ImageHelper::resizeToMaxWidth($fullPath);
             $dims = @getimagesize($fullPath);
             if (is_array($dims)) {
                 $width = $dims[0] ?? null;

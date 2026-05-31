@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PostResource\Pages;
 
 use App\Filament\Resources\PostResource;
+use App\Helpers\ImageHelper;
 use App\Models\MediaFile;
 use App\Models\Post;
 use Filament\Resources\Pages\CreateRecord;
@@ -105,6 +106,7 @@ class CreatePost extends CreateRecord
             $height = null;
 
             if ($mediaType === MediaFile::TYPE_IMAGE && is_file($fullPath)) {
+                ImageHelper::resizeToMaxWidth($fullPath);
                 $dims = @getimagesize($fullPath);
                 if (is_array($dims)) {
                     $width = $dims[0] ?? null;

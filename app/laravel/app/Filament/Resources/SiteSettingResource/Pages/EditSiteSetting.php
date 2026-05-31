@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\SiteSettingResource\Pages;
 
 use App\Filament\Resources\SiteSettingResource;
+use App\Helpers\ImageHelper;
 use App\Models\SiteSetting;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Storage;
 
 class EditSiteSetting extends EditRecord
 {
@@ -26,6 +28,26 @@ class EditSiteSetting extends EditRecord
         }
 
         return $record;
+    }
+
+    protected function afterSave(): void
+    {
+        $settings = $this->record;
+        $disk = Storage::disk('public');
+
+        $imageFields = [
+            'header_background_path',
+            'home_hero_background_path',
+            'site_background_path',
+        ];
+
+        foreach ($imageFields as $field) {
+            $path = $settings->{$field} ?? null;
+            if (filled($path)) {
+                $fullPath = $disk->path((string) $path);
+                ImageHelper::resizeToMaxWidth($fullPath);
+            }
+        }
     }
 }
 
