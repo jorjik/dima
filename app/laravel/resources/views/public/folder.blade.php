@@ -5,7 +5,8 @@
         <div
             class="relative overflow-hidden rounded-2xl shadow-xl bg-[#111]"
             @if ($folder->background_url)
-                style="background-image: url('{{ $folder->background_url }}'); background-size: cover; background-position: center;"
+                data-bg-lazy="{{ $folder->background_url }}"
+                style="background-size: cover; background-position: center;"
             @endif
         >
             <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, {{ $heroBackgroundOpacity / 100 }});"></div>

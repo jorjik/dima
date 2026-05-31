@@ -103,7 +103,8 @@
 </head>
 
 <body class="font-sans antialiased bg-[#020617] text-[#E2E8F0] min-h-screen" @if(!empty($siteBgUrl))
-    style="background-image: url('{{ $siteBgUrl }}'); background-size: cover; background-position: center; background-attachment: fixed;"
+    data-bg-lazy="{{ $siteBgUrl }}"
+    style="background-size: cover; background-position: center; background-attachment: fixed;"
 @endif>
     @if(!empty($siteBgUrl) && $siteBgOverlayPercent > 0)
         <div class="pointer-events-none fixed inset-0 z-0"
@@ -111,8 +112,8 @@
     @endif
 
     <header class="w-full border-b border-white/15 relative z-10 overflow-hidden backdrop-blur"
-        style="background-color: rgba(0, 0, 0, {{ $headerOpacity / 100 }});" data-animate @if(!empty($headerBgUrl))
-            style="background-image: url('{{ $headerBgUrl }}'); background-size: cover; background-position: center; background-color: rgba(0, 0, 0, {{ $headerOpacity / 100 }});"
+        style="background-color: rgba(0, 0, 0, {{ $headerOpacity / 100 }}); background-size: cover; background-position: center;" data-animate @if(!empty($headerBgUrl))
+            data-bg-lazy="{{ $headerBgUrl }}"
         @endif>
         @if(!empty($headerBgUrl))
             <div class="absolute inset-0 bg-black/40"></div>

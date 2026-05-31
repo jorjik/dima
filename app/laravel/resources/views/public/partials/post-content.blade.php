@@ -43,6 +43,18 @@
         html_entity_decode((string) ($contentPost->body_markdown ?? ''), ENT_QUOTES, 'UTF-8')
     );
     $bodyHtml = sanitizeHtml($bodyHtml);
+
+    /**
+     * Add loading="lazy" to all <img> tags that don't already have loading attribute.
+     * RichEditor attachments and markdown images load lazily to save bandwidth.
+     */
+    if (! function_exists('addLazyLoading')) {
+        function addLazyLoading(string $html): string
+        {
+            return preg_replace('/<img\s+(?![^>]*\bloading=)/i', '<img loading="lazy" ', $html);
+        }
+    }
+    $bodyHtml = addLazyLoading($bodyHtml);
 @endphp
 
 @if (filled(trim(strip_tags($bodyHtml))))
