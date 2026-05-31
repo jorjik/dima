@@ -11,7 +11,7 @@ class PostController extends Controller
     public function show(Request $request, string $slug)
     {
         $post = Post::query()
-            ->with(['folder', 'cover', 'images', 'videos', 'audios'])
+            ->with(['folder', 'cover', 'media'])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -20,9 +20,9 @@ class PostController extends Controller
         return view('public.post', [
             'post' => $post,
             'folder' => $folder,
-            'images' => $post->images,
-            'videos' => $post->videos,
-            'audios' => $post->audios,
+            'images' => $post->media->where('media_type', \App\Models\MediaFile::TYPE_IMAGE)->values(),
+            'videos' => $post->media->where('media_type', \App\Models\MediaFile::TYPE_VIDEO)->values(),
+            'audios' => $post->media->where('media_type', \App\Models\MediaFile::TYPE_AUDIO)->values(),
         ]);
     }
 }

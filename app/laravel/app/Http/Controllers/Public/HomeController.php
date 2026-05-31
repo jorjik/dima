@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $recentPosts = Post::query()
-            ->with(['folder', 'cover', 'media', 'images', 'videos', 'audios'])
+            ->with(['folder', 'cover', 'media'])
             ->orderByDesc('created_at')
             ->limit(12)
             ->get();
@@ -39,6 +39,10 @@ class HomeController extends Controller
         });
 
         $recentPosts->each(function (Post $post) {
+            $post->setRelation('images', $post->media->where('media_type', MediaFile::TYPE_IMAGE)->values());
+            $post->setRelation('videos', $post->media->where('media_type', MediaFile::TYPE_VIDEO)->values());
+            $post->setRelation('audios', $post->media->where('media_type', MediaFile::TYPE_AUDIO)->values());
+
             $galleryMedia = $post->media
                 ->filter(fn(MediaFile $m): bool => in_array($m->media_type, [MediaFile::TYPE_IMAGE, MediaFile::TYPE_VIDEO], true))
                 ->sortBy([

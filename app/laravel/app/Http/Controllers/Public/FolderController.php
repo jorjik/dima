@@ -47,10 +47,14 @@ class FolderController extends Controller
         $folder->background_url = $bg ? Storage::disk('public')->url($bg->path) : null;
 
         $posts = $folder->posts()
-            ->with(['cover', 'images', 'videos', 'audios', 'media'])
+            ->with(['cover', 'media'])
             ->orderByDesc('created_at')
             ->get()
             ->map(function (Post $post): Post {
+                $post->setRelation('images', $post->media->where('media_type', MediaFile::TYPE_IMAGE)->values());
+                $post->setRelation('videos', $post->media->where('media_type', MediaFile::TYPE_VIDEO)->values());
+                $post->setRelation('audios', $post->media->where('media_type', MediaFile::TYPE_AUDIO)->values());
+
                 $cover = $post->cover;
                 if ($cover) {
                     if ((int) $cover->post_id !== (int) $post->id || $cover->media_type !== MediaFile::TYPE_IMAGE) {
@@ -59,7 +63,7 @@ class FolderController extends Controller
                 }
 
                 if (!$cover) {
-                    $cover = $post->images()->orderBy('sort')->first();
+                    $cover = $post->images->first();
                     $post->setRelation('cover', $cover);
                 }
 
