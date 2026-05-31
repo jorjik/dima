@@ -160,7 +160,6 @@ class PostResource extends Resource
                                     'image/png',
                                     'image/webp',
                                     'image/gif',
-                                    'image/svg+xml',
                                 ]),
 
                             FileUpload::make('videos')

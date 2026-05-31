@@ -57,7 +57,7 @@ class SiteSettingResource extends Resource
                                 ->nullable()
                                 ->disk('public')
                                 ->directory('site/header')
-                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']),
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
 
                             TextInput::make('header_background_opacity')
                                 ->label('Непрозрачность фона шапки')
@@ -81,7 +81,8 @@ class SiteSettingResource extends Resource
                                 ->image()
                                 ->nullable()
                                 ->disk('public')
-                                ->directory('site/home-hero'),
+                                ->directory('site/home-hero')
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
 
                             TextInput::make('hero_background_opacity')
                                 ->label('Непрозрачность фона Hero')
@@ -92,7 +93,8 @@ class SiteSettingResource extends Resource
                                 ->image()
                                 ->nullable()
                                 ->disk('public')
-                                ->directory('site/background'),
+                                ->directory('site/background')
+                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
 
                             TextInput::make('site_background_overlay_percent')
                                 ->label('Затемнение фона сайта')

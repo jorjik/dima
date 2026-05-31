@@ -23,7 +23,29 @@
     $firstRasterMediaId = $firstRasterMedia?->id;
 @endphp
 
-@if (filled(trim((string) ($contentPost->body_markdown ?? ''))))
+@php
+    /**
+     * Sanitize HTML output: strip script tags, on* event handlers, and javascript: URLs.
+     * Defense-in-depth for XSS prevention in body_markdown output.
+     */
+    if (! function_exists('sanitizeHtml')) {
+        function sanitizeHtml(string $html): string
+        {
+            $html = preg_replace('/<script\b[^>]*>.*?<\/script>/si', '', $html);
+            $html = preg_replace('/\s+on\w+\s*=\s*"[^"]*"/i', '', $html);
+            $html = preg_replace('/\s+on\w+\s*=\s*\'[^\']*\'/i', '', $html);
+            $html = preg_replace('/javascript:/i', '', $html);
+            return $html;
+        }
+    }
+
+    $bodyHtml = \Illuminate\Support\Str::markdown(
+        html_entity_decode((string) ($contentPost->body_markdown ?? ''), ENT_QUOTES, 'UTF-8')
+    );
+    $bodyHtml = sanitizeHtml($bodyHtml);
+@endphp
+
+@if (filled(trim(strip_tags($bodyHtml))))
     <style>
         .post-content {
             word-break: break-word;
@@ -42,7 +64,7 @@
         .post-content img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; }
     </style>
     <article class="post-content text-base leading-8 text-white/85 mb-3">
-        {!! \Illuminate\Support\Str::markdown(html_entity_decode((string) ($contentPost->body_markdown ?? ''), ENT_QUOTES, 'UTF-8')) !!}
+        {!! $bodyHtml !!}
     </article>
 @endif
 
