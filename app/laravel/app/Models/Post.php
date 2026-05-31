@@ -17,6 +17,25 @@ class Post extends Model
         'sort',
     ];
 
+    protected $appends = ['cover_url'];
+
+    public function getCoverUrlAttribute(): ?string
+    {
+        $cover = $this->cover;
+
+        if ($cover) {
+            if ((int) $cover->post_id !== (int) $this->id || $cover->media_type !== MediaFile::TYPE_IMAGE) {
+                $cover = null;
+            }
+        }
+
+        if (! $cover) {
+            $cover = $this->images->first();
+        }
+
+        return $cover?->url;
+    }
+
     public function folder(): BelongsTo
     {
         return $this->belongsTo(Folder::class, 'folder_id');

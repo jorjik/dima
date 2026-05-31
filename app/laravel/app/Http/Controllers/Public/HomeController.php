@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $recentPosts = Post::query()
-            ->with(['folder', 'media', 'images', 'videos', 'audios'])
+            ->with(['folder', 'cover', 'media', 'images', 'videos', 'audios'])
             ->orderByDesc('created_at')
             ->limit(12)
             ->get();
@@ -38,32 +38,7 @@ class HomeController extends Controller
             return $post;
         });
 
-        // Store URLs ready for templates.
         $recentPosts->each(function (Post $post) {
-            $post->media->each(function (MediaFile $m): void {
-                $m->url = Storage::disk('public')->url($m->path);
-            });
-
-            /** @var MediaFile|null $cover */
-            $cover = $post->cover;
-            if ($cover) {
-                if ((int) $cover->post_id !== (int) $post->id || $cover->media_type !== MediaFile::TYPE_IMAGE) {
-                    $cover = null;
-                }
-            }
-
-            $post->cover_url = $cover ? Storage::disk('public')->url($cover->path) : null;
-
-            $post->images->each(function (MediaFile $m): void {
-                $m->url = Storage::disk('public')->url($m->path);
-            });
-            $post->videos->each(function (MediaFile $m): void {
-                $m->url = Storage::disk('public')->url($m->path);
-            });
-            $post->audios->each(function (MediaFile $m): void {
-                $m->url = Storage::disk('public')->url($m->path);
-            });
-
             $galleryMedia = $post->media
                 ->filter(fn(MediaFile $m): bool => in_array($m->media_type, [MediaFile::TYPE_IMAGE, MediaFile::TYPE_VIDEO], true))
                 ->sortBy([

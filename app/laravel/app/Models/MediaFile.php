@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class MediaFile extends Model
 {
@@ -24,6 +25,13 @@ class MediaFile extends Model
         'height',
         'sort',
     ];
+
+    protected $appends = ['url'];
+
+    public function getUrlAttribute(): string
+    {
+        return Storage::disk('public')->url($this->path);
+    }
 
     public function post(): BelongsTo
     {

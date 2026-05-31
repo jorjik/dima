@@ -63,21 +63,6 @@ class FolderController extends Controller
                     $post->setRelation('cover', $cover);
                 }
 
-                $post->cover_url = $cover ? Storage::disk('public')->url($cover->path) : null;
-
-                $post->media->each(function (MediaFile $m): void {
-                    $m->url = Storage::disk('public')->url($m->path);
-                });
-                $post->images->each(function (MediaFile $m): void {
-                    $m->url = Storage::disk('public')->url($m->path);
-                });
-                $post->videos->each(function (MediaFile $m): void {
-                    $m->url = Storage::disk('public')->url($m->path);
-                });
-                $post->audios->each(function (MediaFile $m): void {
-                    $m->url = Storage::disk('public')->url($m->path);
-                });
-
                 return $post;
             });
 
