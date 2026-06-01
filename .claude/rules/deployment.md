@@ -29,15 +29,19 @@ sshpass -p '<пароль>' ssh -o StrictHostKeyChecking=no root@185.237.207.32
 cd /var/www/html
 git pull origin main
 
-# 4. Обновить Laravel
+# 4. Пересобрать Vite (JS/CSS)
 cd app/laravel
+npm ci
+npm run build
+
+# 5. Обновить Laravel
 php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan storage:link --force || true
 
-# 5. Выйти
+# 6. Выйти
 exit
 ```
 
@@ -81,4 +85,5 @@ git stash pop
 - `sshpass` должен быть установлен. Если нет: `apt install sshpass`
 - Не менять SSH-доступы вручную — они хранятся в `.env`
 - После деплоя всегда проверять, что `php artisan migrate --force` выполнился
-- На сервере Vite **не работает** — не пытаться его запускать
+- `npm ci && npm run build` на сервере пересобирает фронт (JS/CSS). `public/build` в `.gitignore`, поэтому это **обязательный** шаг
+- Node.js v22 + npm уже установлены на сервере
