@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 class MediaFile extends Model
 {
+    /** @use HasFactory<\Database\Factories\MediaFileFactory> */
+    use HasFactory;
+
     public const TYPE_IMAGE = 'image';
     public const TYPE_VIDEO = 'video';
     public const TYPE_AUDIO = 'audio';

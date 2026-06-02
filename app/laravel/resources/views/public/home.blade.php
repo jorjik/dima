@@ -94,14 +94,13 @@
 
     <script>
         (function () {
-            const feedItems = document.querySelectorAll('[data-feed-item]');
-            const evaluateFeedItem = (item) => {
-                const preview = item.querySelector('[data-feed-preview]');
-                const gradient = item.querySelector('[data-feed-gradient]');
-                const toggle = item.querySelector('[data-feed-toggle]');
+            function evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight) {
+                const preview = item.querySelector(previewSelector);
+                const gradient = item.querySelector(gradientSelector);
+                const toggle = item.querySelector(toggleSelector);
                 if (!preview || !gradient || !toggle) return;
 
-                const collapsedHeight = preview.dataset.collapsedHeight || '18rem';
+                const collapsedHeight = preview.dataset.collapsedHeight || defaultHeight;
                 const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize || '16');
                 const collapsedPx = parseFloat(collapsedHeight) * rootFontSize;
                 const expanded = item.dataset.expanded === '1';
@@ -133,96 +132,52 @@
                 if (!expanded && prevMaxHeight && prevMaxHeight !== 'none') {
                     preview.style.maxHeight = collapsedHeight;
                 }
-            };
+            }
 
-            feedItems.forEach((item) => {
-                const preview = item.querySelector('[data-feed-preview]');
-                const toggle = item.querySelector('[data-feed-toggle]');
-                if (!preview || !toggle) return;
+            function initExpandableItems(selector, previewSelector, gradientSelector, toggleSelector, defaultHeight) {
+                const items = document.querySelectorAll(selector);
+                items.forEach((item) => {
+                    const preview = item.querySelector(previewSelector);
+                    const toggle = item.querySelector(toggleSelector);
+                    if (!preview || !toggle) return;
 
-                item.dataset.expanded = '0';
-                evaluateFeedItem(item);
-
-                toggle.addEventListener('click', function () {
-                    item.dataset.expanded = item.dataset.expanded === '1' ? '0' : '1';
-                    evaluateFeedItem(item);
-                });
-
-                preview.querySelectorAll('img').forEach((img) => {
-                    if (!img.complete) {
-                        img.addEventListener('load', () => evaluateFeedItem(item), { once: true });
-                        img.addEventListener('error', () => evaluateFeedItem(item), { once: true });
-                    }
-                });
-
-                preview.querySelectorAll('video').forEach((video) => {
-                    video.addEventListener('loadedmetadata', () => evaluateFeedItem(item), { once: true });
-                });
-            });
-
-            const items = document.querySelectorAll('[data-caption-item]');
-            const evaluateItem = (item) => {
-                const preview = item.querySelector('[data-caption-preview]');
-                const gradient = item.querySelector('[data-caption-gradient]');
-                const toggle = item.querySelector('[data-caption-toggle]');
-                if (!preview || !gradient || !toggle) return;
-
-                const collapsedHeight = preview.dataset.collapsedHeight || '8.5rem';
-                const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize || '16');
-                const collapsedPx = parseFloat(collapsedHeight) * rootFontSize;
-                const expanded = item.dataset.expanded === '1';
-                const prevMaxHeight = preview.style.maxHeight;
-                preview.style.maxHeight = 'none';
-                const fullHeight = preview.scrollHeight;
-                const isLong = fullHeight > (collapsedPx + 2);
-                if (!isLong) {
                     item.dataset.expanded = '0';
-                    preview.style.maxHeight = '';
-                    gradient.classList.add('hidden');
-                    toggle.classList.add('hidden');
-                    toggle.textContent = 'Раскрыть';
-                    return;
-                }
+                    evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight);
 
-                toggle.classList.remove('hidden');
-                if (expanded) {
-                    preview.style.maxHeight = fullHeight + 'px';
-                    gradient.classList.add('hidden');
-                    toggle.textContent = 'Свернуть';
-                } else {
-                    preview.style.maxHeight = collapsedHeight;
-                    gradient.classList.remove('hidden');
-                    toggle.textContent = 'Раскрыть';
-                }
+                    toggle.addEventListener('click', function () {
+                        item.dataset.expanded = item.dataset.expanded === '1' ? '0' : '1';
+                        evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight);
+                    });
 
-                if (!expanded && prevMaxHeight && prevMaxHeight !== 'none') {
-                    preview.style.maxHeight = collapsedHeight;
-                }
-            };
+                    preview.querySelectorAll('img').forEach((img) => {
+                        if (!img.complete) {
+                            img.addEventListener('load', () => evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight), { once: true });
+                            img.addEventListener('error', () => evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight), { once: true });
+                        }
+                    });
 
-            items.forEach((item) => {
-                const preview = item.querySelector('[data-caption-preview]');
-                const toggle = item.querySelector('[data-caption-toggle]');
-                if (!preview || !toggle) return;
-
-                item.dataset.expanded = '0';
-                evaluateItem(item);
-
-                toggle.addEventListener('click', function () {
-                    item.dataset.expanded = item.dataset.expanded === '1' ? '0' : '1';
-                    evaluateItem(item);
+                    preview.querySelectorAll('video').forEach((video) => {
+                        video.addEventListener('loadedmetadata', () => evaluateExpandable(item, previewSelector, gradientSelector, toggleSelector, defaultHeight), { once: true });
+                    });
                 });
+                return items;
+            }
 
-            });
+            const feedItems = initExpandableItems('[data-feed-item]', '[data-feed-preview]', '[data-feed-gradient]', '[data-feed-toggle]', '18rem');
+            const captionItems = initExpandableItems('[data-caption-item]', '[data-caption-preview]', '[data-caption-gradient]', '[data-caption-toggle]', '8.5rem');
 
+            let resizeTimer;
             window.addEventListener('load', () => {
-                feedItems.forEach((item) => evaluateFeedItem(item));
-                items.forEach((item) => evaluateItem(item));
+                feedItems.forEach((item) => evaluateExpandable(item, '[data-feed-preview]', '[data-feed-gradient]', '[data-feed-toggle]', '18rem'));
+                captionItems.forEach((item) => evaluateExpandable(item, '[data-caption-preview]', '[data-caption-gradient]', '[data-caption-toggle]', '8.5rem'));
             });
 
             window.addEventListener('resize', () => {
-                feedItems.forEach((item) => evaluateFeedItem(item));
-                items.forEach((item) => evaluateItem(item));
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    feedItems.forEach((item) => evaluateExpandable(item, '[data-feed-preview]', '[data-feed-gradient]', '[data-feed-toggle]', '18rem'));
+                    captionItems.forEach((item) => evaluateExpandable(item, '[data-caption-preview]', '[data-caption-gradient]', '[data-caption-toggle]', '8.5rem'));
+                }, 150);
             });
         })();
     </script>

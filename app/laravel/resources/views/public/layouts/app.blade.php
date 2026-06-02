@@ -103,8 +103,7 @@
 </head>
 
 <body class="font-sans antialiased bg-[#020617] text-[#E2E8F0] min-h-screen" @if(!empty($siteBgUrl))
-    data-bg-lazy="{{ $siteBgUrl }}"
-    style="background-size: cover; background-position: center; background-attachment: fixed;"
+    style="background-image: url('{{ $siteBgUrl }}'); background-size: cover; background-position: center; background-attachment: fixed;"
 @endif>
     @if(!empty($siteBgUrl) && $siteBgOverlayPercent > 0)
         <div class="pointer-events-none fixed inset-0 z-0"

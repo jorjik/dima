@@ -24,36 +24,12 @@
 @endphp
 
 @php
-    /**
-     * Sanitize HTML output: strip script tags, on* event handlers, and javascript: URLs.
-     * Defense-in-depth for XSS prevention in body_markdown output.
-     */
-    if (! function_exists('sanitizeHtml')) {
-        function sanitizeHtml(string $html): string
-        {
-            $html = preg_replace('/<script\b[^>]*>.*?<\/script>/si', '', $html);
-            $html = preg_replace('/\s+on\w+\s*=\s*"[^"]*"/i', '', $html);
-            $html = preg_replace('/\s+on\w+\s*=\s*\'[^\']*\'/i', '', $html);
-            $html = preg_replace('/javascript:/i', '', $html);
-            return $html;
-        }
-    }
+    require_once base_path('app/Helpers/sanitize.php');
 
     $bodyHtml = \Illuminate\Support\Str::markdown(
         html_entity_decode((string) ($contentPost->body_markdown ?? ''), ENT_QUOTES, 'UTF-8')
     );
     $bodyHtml = sanitizeHtml($bodyHtml);
-
-    /**
-     * Add loading="lazy" to all <img> tags that don't already have loading attribute.
-     * RichEditor attachments and markdown images load lazily to save bandwidth.
-     */
-    if (! function_exists('addLazyLoading')) {
-        function addLazyLoading(string $html): string
-        {
-            return preg_replace('/<img\s+(?![^>]*\bloading=)/i', '<img loading="lazy" ', $html);
-        }
-    }
     $bodyHtml = addLazyLoading($bodyHtml);
 @endphp
 

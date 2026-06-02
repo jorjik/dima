@@ -56,7 +56,7 @@ const initLazyBackgrounds = () => {
     const applyBg = (el) => {
         const src = el.dataset.bgLazy;
         if (src) {
-            el.style.backgroundImage = `url('${src}')`;
+            el.style.backgroundImage = `url("${src}")`;
             el.removeAttribute('data-bg-lazy');
         }
     };
