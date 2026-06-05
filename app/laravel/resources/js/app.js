@@ -50,7 +50,7 @@ const initRevealAnimations = () => {
                 item.classList.add('reveal-in');
             }
         });
-    }, 5000);
+    }, 3000);
 };
 
 /**
