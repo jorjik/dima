@@ -93,6 +93,14 @@
             }
         }
     </style>
+    <noscript>
+        <style>
+            [data-animate],
+            [data-animate-hero] {
+                opacity: 1;
+            }
+        </style>
+    </noscript>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" integrity="sha384-qlUhevqmCF5AxtnfkF0zXJClBzA6GJuX/UrLejCfE61bBGt+zo/My0AJ+ojVmUSb" crossorigin="anonymous" />
     @stack('styles')

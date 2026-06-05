@@ -42,6 +42,15 @@ const initRevealAnimations = () => {
 
         observer.observe(item);
     });
+
+    // Safety fallback: reveal all items after 5s if observer hasn't fired
+    setTimeout(() => {
+        animatedItems.forEach((item) => {
+            if (!item.classList.contains('reveal-in')) {
+                item.classList.add('reveal-in');
+            }
+        });
+    }, 5000);
 };
 
 /**
