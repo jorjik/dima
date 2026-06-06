@@ -57,9 +57,7 @@ Artisan::command('images:optimize {--dry-run : Show stats without changing files
         if (! $needsOptimize) {
             try {
                 $mime = @mime_content_type($fullPath);
-                $dims = @getimagesize($fullPath);
-                $maxDim = $dims ? max((int) ($dims[0] ?? 0), (int) ($dims[1] ?? 0)) : 0;
-                $needsOptimize = $mime && str_starts_with((string) $mime, 'image/png') && $maxDim > 0;
+                $needsOptimize = $mime && str_starts_with((string) $mime, 'image/');
             } catch (\Throwable) {
                 $needsOptimize = false;
             }

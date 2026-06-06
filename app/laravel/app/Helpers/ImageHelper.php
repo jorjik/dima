@@ -11,7 +11,7 @@ class ImageHelper
     private static ?ImageManager $manager = null;
 
     private const QUALITY_MAP = [
-        'image/png'  => 80,
+        'image/png'  => 8,
         'image/jpeg' => 85,
         'image/webp' => 85,
     ];
@@ -46,7 +46,7 @@ class ImageHelper
             }
 
             $originalSize = filesize($fullPath);
-            $image = self::$manager->read($fullPath);
+            $image = self::$manager->decodePath($fullPath);
             $width = $image->width();
             $height = $image->height();
 
