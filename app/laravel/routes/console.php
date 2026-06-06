@@ -14,6 +14,136 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+Artisan::command('images:optimize {--dry-run : Show stats without changing files} {--force : Recompress even if within size limits}', function () {
+    $dryRun = (bool) $this->option('dry-run');
+    $force = (bool) $this->option('force');
+
+    $disk = Storage::disk('public');
+
+    /** @var \Illuminate\Database\Eloquent\Collection<int, MediaFile> $mediaFiles */
+    $mediaFiles = MediaFile::query()
+        ->where('media_type', MediaFile::TYPE_IMAGE)
+        ->get();
+
+    $totalBefore = 0;
+    $totalAfter = 0;
+    $optimized = 0;
+    $skipped = 0;
+    $errors = 0;
+
+    $this->info('Optimizing ' . $mediaFiles->count() . ' images...');
+    $bar = $this->output->createProgressBar($mediaFiles->count());
+    $bar->start();
+
+    foreach ($mediaFiles as $mediaFile) {
+        $fullPath = $disk->path($mediaFile->path);
+
+        if (! is_file($fullPath)) {
+            $skipped++;
+            $bar->advance();
+            continue;
+        }
+
+        $originalSize = filesize($fullPath);
+        $totalBefore += $originalSize;
+
+        if ($dryRun) {
+            $totalAfter += $originalSize;
+            $bar->advance();
+            continue;
+        }
+
+        $needsOptimize = $force;
+        if (! $needsOptimize) {
+            try {
+                $mime = @mime_content_type($fullPath);
+                $dims = @getimagesize($fullPath);
+                $maxDim = $dims ? max((int) ($dims[0] ?? 0), (int) ($dims[1] ?? 0)) : 0;
+                $needsOptimize = $mime && str_starts_with((string) $mime, 'image/png') && $maxDim > 0;
+            } catch (\Throwable) {
+                $needsOptimize = false;
+            }
+        }
+
+        if ($needsOptimize) {
+            $saved = \App\Helpers\ImageHelper::resizeToMaxWidth($fullPath);
+
+            if ($saved !== false) {
+                clearstatcache(true, $fullPath);
+                $newSize = filesize($fullPath);
+                $totalAfter += $newSize;
+
+                if ($newSize !== $originalSize) {
+                    $mediaFile->update(['size_bytes' => $newSize]);
+                    $optimized++;
+                } else {
+                    $skipped++;
+                }
+            } else {
+                $totalAfter += $originalSize;
+                $errors++;
+            }
+        } else {
+            $totalAfter += $originalSize;
+            $skipped++;
+        }
+
+        $bar->advance();
+    }
+
+    $bar->finish();
+    $this->newLine(2);
+
+    // Site settings images
+    $siteSetting = \App\Models\SiteSetting::first();
+    $siteSaved = 0;
+
+    if ($siteSetting) {
+        $bgFields = [
+            'header_background_path',
+            'home_hero_background_path',
+            'site_background_path',
+        ];
+
+        foreach ($bgFields as $field) {
+            $relPath = $siteSetting->{$field};
+            if (empty($relPath)) continue;
+
+            $fullPath = $disk->path($relPath);
+            if (! is_file($fullPath)) continue;
+
+            $before = filesize($fullPath);
+            $totalBefore += $before;
+
+            if (! $dryRun) {
+                $saved = \App\Helpers\ImageHelper::resizeToMaxWidth($fullPath);
+                clearstatcache(true, $fullPath);
+                $after = filesize($fullPath);
+                $totalAfter += $after;
+                if ($after < $before) $siteSaved++;
+            } else {
+                $totalAfter += $before;
+            }
+        }
+    }
+
+    $savedBytes = $totalBefore - $totalAfter;
+    $savedPercent = $totalBefore > 0 ? round(($savedBytes / $totalBefore) * 100, 1) : 0;
+
+    $fmtFn = function (int $bytes): string {
+        if ($bytes >= 1_048_576) return round($bytes / 1_048_576, 1) . ' MB';
+        if ($bytes >= 1024) return round($bytes / 1024, 1) . ' KB';
+        return $bytes . ' B';
+    };
+
+    $label = $dryRun ? '[DRY RUN] ' : '';
+    $this->info("{$label}Done. Images: {$mediaFiles->count()} total, {$optimized} optimized, {$skipped} skipped, {$errors} errors");
+    $this->info("{$label}Site backgrounds: {$siteSaved} optimized");
+    $this->info("{$label}Size: " . $fmtFn($totalBefore) . " → " . $fmtFn($totalAfter) . " (saved {$savedPercent}%)");
+
+    return self::SUCCESS;
+})->purpose('Optimize all uploaded images with compression and size limits');
+
 Artisan::command('demo:import {--force}', function () {
     $force = (bool) $this->option('force');
 
